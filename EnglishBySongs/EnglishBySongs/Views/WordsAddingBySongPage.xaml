@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:EnglishBySongs.ViewModels"
+             xmlns:converters="clr-namespace:EnglishBySongs.Controls.Converters"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:DataType="viewmodels:WordsAddingBySongPageViewModel"
+             x:Class="EnglishBySongs.Views.WordsAddingBySongPage"
+             x:Name="wordsAddingBySongPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <viewmodels:WordsAddingBySongPageViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ScrollView>
+        <StackLayout>
+            <StackLayout x:Name="EntryStackLayout">
+                <Entry x:Name="ArtistEntry"
+                       Placeholder="Исполнитель"
+                       Margin="10, 25, 10, 10"
+                       Text="{Binding Performer}"/>
+
+                <Entry x:Name="SongNameEntry"
+                       Placeholder="Название песни"
+                       Margin="10, 10, 10, 10"
+                       Text="{Binding SongName}"/>
+
+                <Button x:Name="FindLyricsButton"
+                        Text="Найти"
+                        Margin="50, 10, 50, 10"
+                        Command="{Binding GetLyricsCommand}">
+                </Button>
+
+            </StackLayout>
+
+            <StackLayout x:Name="NoInternetConnectionStackLayout"
+                         IsVisible="{Binding IsConnectedToInternet, Mode=TwoWay, Converter={StaticResource InvertedBoolConverter}}"
+                         Margin="25">
+                <Label HorizontalOptions="Center"
+                       FontSize="22"
+                       Text="Нет подключения к интернету. Можете ввести текст песни вручную"/>
+
+                <Button Text="Ввести текст вручную"
+                        Margin="25, 0, 25, 0"/>
+            </StackLayout>
+            
+            <StackLayout x:Name="SongIsAlreadyAddedStachLayout"
+                         IsVisible="{Binding SongIsAlreadyAddedStachLayoutIsVisible, Mode=TwoWay}">
+                <Label HorizontalOptions="Center"
+                       FontSize="Medium">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Песня с таким названием уже добавлена"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

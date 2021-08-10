@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels;assembly=EnglishBySongs"
+             xmlns:converters="clr-namespace:EnglishBySongs.Controls.Converters"
+             x:Class="EnglishBySongs.Views.WordsAddingPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="inverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.BindingContext>
+        <viewmodel:WordsAddingBySongPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <Grid>
+
+            <StackLayout >
+                <StackLayout Orientation="Horizontal">
+                    <Switch IsToggled="{Binding AddedWordsAreHidden, Mode=TwoWay}"/>
+                    <Label Text="Скрыть уже добавленные слова"
+                           FontSize="22"/>
+                </StackLayout>
+
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Выделено слов: "
+                                  FontSize="22"/>
+                            <Span Text="{Binding Words.Count}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label Text="Выберите неизвестные вам слова"
+                       FontAttributes="Bold"
+                       FontSize="22"
+                       HorizontalTextAlignment="Center"/>
+
+                <CollectionView ItemsSource="{Binding Words}"
+                            x:Name="ExtractedWordsCollectionView"
+                            SelectionMode="Multiple"
+                            SelectedItems="{Binding SelectedWords, Mode=TwoWay}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Label Text="{Binding Foreign}"
+                                   FontSize="Title"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button x:Name="SaveSongButton"
+                        Text="Добавить в словарь"
+                        Margin="50, 10, 50, 10"
+                        Command="{Binding AddSelectedWordsCommand}"/>
+
+            </StackLayout>
+
+            <Frame VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   WidthRequest="150"
+                   HeightRequest="150"
+                   CornerRadius="20"
+                   BackgroundColor="Black"
+                   Opacity="0.5"
+                   IsVisible="{Binding IsBusy}">
+                <StackLayout>
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                           HorizontalOptions="CenterAndExpand"
+                                           VerticalOptions="CenterAndExpand"/>
+
+                    <Label Text="Слова переводятся"
+                               FontSize="17"
+                               TextColor="OrangeRed"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="CenterAndExpand"/>
+                </StackLayout>
+            </Frame>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

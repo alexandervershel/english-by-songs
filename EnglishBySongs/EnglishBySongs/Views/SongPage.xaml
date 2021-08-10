@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="EnglishBySongs.Views.SongPage">
+
+    <ContentPage.BindingContext>
+        <viewmodel:SongViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ListToStringConverter x:Key="ListToStringConverter" Separator=", " />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Label HorizontalOptions="CenterAndExpand"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       Margin="5">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Artist, Mode=TwoWay}"/>
+                            <Span Text=" - "/>
+                            <Span Text="{Binding Name, Mode=TwoWay}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <xct:Expander>
+                    <xct:Expander.Header>
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="10">
+                            <Label Text="Текст песни"
+                                   FontAttributes="Bold"
+                                   FontSize="22"/>
+                            <Image Source="expand.png"
+                                   HorizontalOptions="EndAndExpand"
+                                   VerticalOptions="Start"
+                                   HeightRequest="20">
+                                <Image.Triggers>
+                                    <DataTrigger TargetType="Image"
+                                             Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                             Value="True">
+                                        <Setter Property="Source"
+                                            Value="collapse.png"/>
+                                    </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+                        </StackLayout>
+                    </xct:Expander.Header>
+
+                    <Editor Text="{Binding PrimarySong.Lyrics}"
+                            IsReadOnly="True"
+                            MinimumHeightRequest="400"
+                            Margin="5, 0, 5, 0"/>
+
+                </xct:Expander>
+
+                <xct:Expander MinimumHeightRequest="100">
+                    <xct:Expander.Header>
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="10">
+                            <Label Text="Невыученные слова"
+                                   FontAttributes="Bold"
+                                   FontSize="22"/>
+                            <Image Source="expand.png"
+                                   HorizontalOptions="EndAndExpand"
+                                   VerticalOptions="Start"
+                                   HeightRequest="20">
+                                <Image.Triggers>
+                                    <DataTrigger TargetType="Image"
+                                             Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                             Value="True">
+                                        <Setter Property="Source"
+                                            Value="collapse.png"/>
+                                    </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+                        </StackLayout>
+                    </xct:Expander.Header>
+
+                    <StackLayout HeightRequest="350">
+                        <ListView ItemsSource="{Binding PrimarySong.UnlearnedWords}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout Margin="5">
+                                            <Label Text="{Binding Foreign}"
+                                               FontSize="24"
+                                               FontAttributes="Bold"/>
+
+                                            <!--<CollectionView ItemsSource="{Binding Translations}">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Label BackgroundColor="#dbdbdb"
+                                                           FontSize="22">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="{Binding Text, TargetNullValue='Перевод не найден'}"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Horizontal"
+                                                               ItemSpacing="3"/>
+                                            </CollectionView.ItemsLayout>
+                                        </CollectionView>-->
+
+                                            <Label Text="{Binding Translations, Converter={StaticResource ListToStringConverter}}"
+                                               FontSize="22"/>
+
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </xct:Expander>
+
+                <xct:Expander>
+                    <xct:Expander.Header>
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="10">
+                            <Label Text="Выученные слова"
+                                   FontAttributes="Bold"
+                                   FontSize="22"/>
+                            <Image Source="expand.png"
+                                   HorizontalOptions="EndAndExpand"
+                                   VerticalOptions="Start"
+                                   HeightRequest="20">
+                                <Image.Triggers>
+                                    <DataTrigger TargetType="Image"
+                                                 Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                 Value="True">
+                                        <Setter Property="Source"
+                                                Value="collapse.png"/>
+                                    </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+                        </StackLayout>
+                    </xct:Expander.Header>
+
+                    <ListView ItemsSource="{Binding PrimarySong.LearnedWords}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Margin="5">
+                                        <Label Text="{Binding Foreign}"
+                                               FontSize="24"
+                                               FontAttributes="Bold"/>
+
+                                        <!--<CollectionView ItemsSource="{Binding Translations}">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Label BackgroundColor="#dbdbdb"
+                                                       FontSize="Subtitle">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="{Binding Text, TargetNullValue='Перевод не найден'}"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Horizontal"
+                                                               ItemSpacing="3"/>
+                                            </CollectionView.ItemsLayout>
+                                        </CollectionView>-->
+
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </xct:Expander>
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

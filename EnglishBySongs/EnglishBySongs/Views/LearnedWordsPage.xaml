@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels;assembly=EnglishBySongs"
+             xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="EnglishBySongs.Views.LearnedWordsPage">
+
+    <ContentPage.BindingContext>
+        <viewmodel:LearnedWordsListViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ListToStringConverter x:Key="ListToStringConverter" Separator=", " />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout>
+
+            <SearchBar x:Name="LearnedWordsSearchBar"
+                       Text="{Binding ItemsSearchQuery}"
+                       Placeholder="Поиск"/>
+
+            <mr:ListView ItemsSource="{Binding Items}"
+                         x:Name="LearnedWordsListView"
+                         RowHeight="75"
+                         SeparatorColor="Gray"
+                         SelectionMode="None"
+                         ItemTapped="LearnedWordsListView_ItemTapped"
+                         LongPressing="LearnedWordsListView_LongPressing"
+                         LongPressingCommand="{Binding DisplayCheckBoxesCommand}"
+                         IsVisible="{Binding AllItems, Converter={xct:ListIsNotNullOrEmptyConverter}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Spacing="0"
+                                         Margin="5">
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Path=Foreign}"
+                                           FontSize="24"
+                                           FontAttributes="Bold"/>
+
+                                    <CheckBox HorizontalOptions="EndAndExpand"
+                                              IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:LearnedWordsListViewModel}}, Path=IsMultiselect}"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+
+                                </StackLayout>
+
+                                <ScrollView Orientation="Horizontal"
+                                            HorizontalScrollBarVisibility="Never">
+                                    <Label Text="{Binding Songs, Converter={StaticResource ListToStringConverter}}"
+                                           FontSize="22"/>
+                                </ScrollView>
+
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </mr:ListView>
+
+            <Label Text="Выученных слов нет. Чтобы добавить новые слова, перейдите на страницу &quot;ДОБАВЛЕНИЕ&quot;"
+                   IsVisible="{Binding AllItems, Converter={xct:ListIsNullOrEmptyConverter}}"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   Margin="25, 0, 25, 0"
+                   FontSize="22"/>
+
+            <StackLayout Orientation="Horizontal"
+                         HeightRequest="50"
+                         VerticalOptions="End"
+                         HorizontalOptions="FillAndExpand"
+                         BackgroundColor="Gray"
+                         IsVisible="{Binding IsMultiselect}">
+
+                <Label Text="удалить"
+                       TextDecorations="Underline"
+                       TextColor="OrangeRed"
+                       FontSize="22"
+                       HorizontalOptions="End"
+                       Margin="5, 0, 5, 0">
+
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding DeleteWordsCommand}"/>
+                    </Label.GestureRecognizers>
+
+                </Label>
+
+                <Label Text="перенести в выученные"
+                       TextDecorations="Underline"
+                       TextColor="OrangeRed"
+                       FontSize="22"
+                       HorizontalOptions="End"
+                       Margin="5, 0, 5, 0">
+
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
+                    </Label.GestureRecognizers>
+
+                </Label>
+
+                <Label Text="выделить все"
+                       TextDecorations="Underline"
+                       TextColor="OrangeRed"
+                       FontSize="22"
+                       HorizontalOptions="End"
+                       Margin="5, 0, 5, 0">
+
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
+                    </Label.GestureRecognizers>
+
+                </Label>
+
+                <Label Text="отмена"
+                       TextDecorations="Underline"
+                       TextColor="OrangeRed"
+                       FontSize="22"
+                       HorizontalOptions="End"
+                       Margin="5, 0, 5, 0">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CancelMultiselectCommand}"/>
+                    </Label.GestureRecognizers>
+
+                </Label>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EnglishBySongs.MainPage">
+
+    
+    
+    <!--TODO: fix icons-->
+    <!--<Grid RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
+        --><!--Header--><!--
+        <StackLayout Grid.Row="0"
+                     Orientation="Horizontal"
+                     BackgroundColor="CornflowerBlue">
+
+            <Image Source="sidebar_menu.png"
+                   WidthRequest="40"
+                   HeightRequest="40"
+                   Margin="5"
+                   />
+
+            <Label Text=""/>
+
+        </StackLayout>
+
+        --><!--Content--><!--
+        <Frame Grid.Row="1"
+               x:Name="ContentFrame"
+               BackgroundColor="LightGray"
+               VerticalOptions="FillAndExpand">
+            
+        </Frame>
+        
+        <CarouselView>
+            <CarouselView.ItemTemplate>
+                <DataTemplate></DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+
+        --><!--Navigation--><!--
+        <Grid Grid.Row="2"
+              x:Name="NavigationGrid"
+              BackgroundColor="White">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            --><!--Words addition--><!--
+            <StackLayout Grid.Column="0"
+                         VerticalOptions="CenterAndExpand">
+
+                <ImageButton x:Name="WordsAdditionNavImageButton"
+                             Clicked="WordsAdditionNavImageButton_Clicked"
+                             Source="add.png"
+                             HeightRequest="30"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             BindingContext="{x:Reference Name=NavigationGrid}"
+                             BackgroundColor="{Binding Path=BackgroundColor}"/>
+
+                <Label Text="ДОБАВИТЬ"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="Gray"/>
+
+            </StackLayout>
+
+            --><!--Songs list--><!--
+            <StackLayout Grid.Column="1"
+                         VerticalOptions="CenterAndExpand">
+
+                <ImageButton x:Name="SongsNavImageButton"
+                             Clicked="SongsNavImageButton_Clicked"
+                             Source="songs_list.png"
+                             HeightRequest="30"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             BindingContext="{x:Reference Name=NavigationGrid}"
+                             BackgroundColor="{Binding Path=BackgroundColor}"
+                             />
+
+                <Label Text="ПЕСНИ"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="Gray"/>
+
+            </StackLayout>
+
+            --><!--Dictionary--><!--
+            <StackLayout Grid.Column="2"
+                         VerticalOptions="CenterAndExpand">
+
+                <ImageButton x:Name="DictionaryNavImageButton"
+                             Clicked="DictionaryNavImageButton_Clicked"
+                             Source="dictionary.png"
+                             HeightRequest="30"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             BindingContext="{x:Reference Name=NavigationGrid}"
+                             BackgroundColor="{Binding Path=BackgroundColor}"/>
+
+                <Label Text="СЛОВАРЬ"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="Gray"/>
+
+            </StackLayout>
+
+            --><!--Training--><!--
+            <StackLayout Grid.Column="3"
+                         VerticalOptions="CenterAndExpand">
+
+                <ImageButton x:Name="TrainingNavImageButton"
+                             Clicked="TrainingNavImageButton_Clicked"
+                             Source="studying.png"
+                             HeightRequest="30"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             BindingContext="{x:Reference Name=NavigationGrid}"
+                             BackgroundColor="{Binding Path=BackgroundColor}"/>
+
+                <Label Text="ТРЕНИРОВКА"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="Gray"/>
+
+            </StackLayout>
+        </Grid>
+    </Grid>-->
+
+</ContentPage>

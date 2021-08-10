@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels"
+             x:Class="EnglishBySongs.Views.LyricsPage">
+
+    <ContentPage.BindingContext>
+        <viewmodel:WordsAddingBySongPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout>
+
+                <StackLayout x:Name="FoundLyricsStackLayout"
+                         IsVisible="{Binding FoundLyricsStackLayoutIsVisible}">
+
+                    <Button Text="Выделить слова из текста"
+                        Margin="50, 10, 50, 10"
+                        Command="{Binding ExtractWordsCommand}"/>
+
+                    <Label Text="Текст песни"
+                       FontAttributes="Bold"
+                       FontSize="Medium"
+                       HorizontalTextAlignment="Center"/>
+
+                    <ScrollView>
+                        <Editor x:Name="FoundLyricsEntry"
+                        Text="{Binding Lyrics}"
+                        IsReadOnly="True"/>
+                    </ScrollView>
+                </StackLayout>
+
+                <StackLayout x:Name="ManuallyLyricsAddingStackLayout"
+                         IsVisible="{Binding ManuallyLyricsAddingStackLayoutIsVisible}">
+                    <Label Text="Текст песни"
+                       FontAttributes="Bold"
+                       FontSize="Medium"
+                       HorizontalTextAlignment="Center"/>
+
+                    <Editor x:Name="LyricsEditor"
+                        Text="{Binding Lyrics}"
+                        Placeholder="Вставьте скопированный текст песни или введите его вручную"
+                        HeightRequest="400">
+                    </Editor>
+
+                    <Button Text="Выделить слова"
+                        Margin="50, 10, 50, 10"
+                        Command="{Binding ExtractWordsCommand}"/>
+                </StackLayout>
+
+                <StackLayout x:Name="LyricsAreNotFoundStackLayout"
+                         IsVisible="{Binding LyricsAreNotFoundStackLayoutIsVisible, Mode=TwoWay}">
+                    <Label HorizontalOptions="Center"
+                       FontSize="Medium">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Текст песни не найден"/>
+                                <Span Text="Проверьте корректность ввода исполнителя и названия песни, либо введите текст вручную"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Button Text="Ввести текст вручную"
+                        Command="{Binding GetLyricsManuallyCommand}"/>
+                </StackLayout>
+
+                <Frame VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   WidthRequest="150"
+                   HeightRequest="150"
+                   CornerRadius="20"
+                   BackgroundColor="Black"
+                   Opacity="0.5"
+                   IsVisible="{Binding IsBusy}">
+                    <StackLayout>
+
+                        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                           HorizontalOptions="CenterAndExpand"
+                                           VerticalOptions="CenterAndExpand"/>
+
+                        <Label Text="Поиск текста песни"
+                               FontSize="17"
+                               TextColor="OrangeRed"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </Frame>
+
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

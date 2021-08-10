@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             x:Class="EnglishBySongs.Views.CardsForeignNativeTrainingPage">
+    
+    <ContentPage.BindingContext>
+        <viewmodel:TrainingViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ListToStringConverter x:Key="ListToStringConverter" Separator=", " />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <ImageButton Source="delete.png"
+                         HeightRequest="40"
+                         WidthRequest="40"
+                         HorizontalOptions="Start"
+                         Command="{Binding PopPageCommand}"/>
+
+            <Label FontSize="Title"
+                   HorizontalOptions="CenterAndExpand">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding Source={x:Reference WordsCarouselView}, Path=Position}"/>
+                        <Span Text="/"/>
+                        <Span Text="{Binding Words.Count}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <StackLayout VerticalOptions="Start"
+                         HeightRequest="100">
+                <Label FontSize="Title"
+                       HorizontalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="..."/>
+                            <Span Text="{Binding CurrentWord.Line}"/>
+                            <Span Text="..."/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+
+            <Button Text="Следующая"
+                    FontSize="Medium"
+                    HorizontalOptions="End"
+                    VerticalOptions="End"
+                    Margin="0, 0, 25, 0"
+                    Clicked="Button_Clicked"/>
+            
+            <CarouselView ItemsSource="{Binding Words}"
+                          x:Name="WordsCarouselView"
+                          HeightRequest="200"
+                          VerticalOptions="Center"
+                          CurrentItem="{Binding CurrentWord}"
+                          Loop="False"
+                          IsSwipeEnabled="False">
+                <CarouselView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal"
+                                       ItemSpacing="50"
+                                       SnapPointsType="MandatorySingle"/>
+                </CarouselView.ItemsLayout>
+
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame HasShadow="True"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               CornerRadius="5"
+                               BorderColor="DarkGray"
+                               BackgroundColor="LightGray">
+                            <Grid>
+
+                                <Label Text="{Binding Foreign}"
+                                       HorizontalOptions="CenterAndExpand"
+                                       VerticalOptions="CenterAndExpand"
+                                       FontSize="Title">
+                                </Label>
+
+                                <Label Text="{Binding Translations, Converter={StaticResource ListToStringConverter}}"
+                                       HorizontalOptions="CenterAndExpand"
+                                       VerticalOptions="CenterAndExpand"
+                                       FontSize="Title"
+                                       RotationY="180"
+                                       IsVisible="False">
+                                </Label>
+
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+
+            <StackLayout Orientation="Horizontal"
+                         Margin="25"
+                         VerticalOptions="StartAndExpand"
+                         HorizontalOptions="EndAndExpand">
+                <Label Text="Отметить как выученное"
+                       FontSize="Title"
+                       HorizontalOptions="End"/>
+                <CheckBox IsChecked="{Binding CurrentWord.IsLearned, Mode=TwoWay}"
+                          HorizontalOptions="End"/>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels"
+             x:Class="EnglishBySongs.Views.StartTrainingPage">
+    <ContentPage.BindingContext>
+        <viewmodel:TrainingsMenuViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Выберите режим тренировки"
+                   HorizontalOptions="Center"
+                   Margin="25"
+                   FontSize="Title"/>
+
+            <Grid Margin="10, 50, 10, 50"
+                  RowSpacing="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0"
+                      BackgroundColor="LightGray">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="9*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="flash_cards.png"
+                           HeightRequest="40"
+                           Grid.Column="0"/>
+
+                    <Label Text="Карточки (с английского на русский)"
+                           FontSize="Title"
+                           Grid.Column="1"/>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding StartTrainingCommand}"
+                                              CommandParameter="0"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      BackgroundColor="LightGray">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="9*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="flash_cards.png"
+                           HeightRequest="40"
+                           Grid.Column="0"/>
+
+                    <Label Text="Карточки (с русского на английский)"
+                           FontSize="Title"
+                           Grid.Column="1"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding StartTrainingCommand}"
+                                              CommandParameter="1"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+            </Grid>
+            
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
