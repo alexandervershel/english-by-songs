@@ -66,6 +66,7 @@ namespace EnglishBySongs.ViewModels
             MessagingCenter.Send((ListViewModel<SongItem>)this, "SongsDeleted");
 
             await CancelMultiselect();
+            await _pageService.DispayToast("Песни удалены");
         }
     }
 }

@@ -88,7 +88,7 @@
 
                 </Label>
 
-                <Label Text="выучено"
+                <Label Text="не выучено"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
                        FontSize="17"
@@ -96,7 +96,7 @@
                        VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
+                        <TapGestureRecognizer Command="{Binding TransferToUnlearnedWordsCommand}"/>
                     </Label.GestureRecognizers>
 
                 </Label>

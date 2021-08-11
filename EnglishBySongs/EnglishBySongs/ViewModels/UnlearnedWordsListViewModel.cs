@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -13,6 +14,8 @@ namespace EnglishBySongs.ViewModels
     {
         public UnlearnedWordsListViewModel() : base()
         {
+            TransferToLearnedWordsCommand = new Command(async () => await TransferToLearnedWords());
+
             MessagingCenter.Subscribe<WordsAddingBySongPageViewModel>(
                 this,
                 "WordsAdded",
@@ -29,14 +32,15 @@ namespace EnglishBySongs.ViewModels
                     await RefreshAsync();
                 });
 
-            MessagingCenter.Subscribe<ListViewModel<SongItem>>(
+            MessagingCenter.Subscribe<ListViewModel<WordItem>>(
                 this,
-                "SongsDeleted",
+                "WordsListChanged",
                 async (sender) =>
                 {
                     await RefreshAsync();
                 });
         }
+        public ICommand TransferToLearnedWordsCommand { get; private set; }
 
         protected override async Task ReadCollectionFromDb()
         {
@@ -71,10 +75,33 @@ namespace EnglishBySongs.ViewModels
                 db.SaveChanges();
             }
 
-            await RefreshAsync();
             MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
 
             await CancelMultiselect();
+            await _pageService.DispayToast("Слова удалены");
+        }
+
+        private async Task TransferToLearnedWords()
+        {
+            if (SelectedItems.Count == 0)
+                return;
+
+            bool isConfirmed = await _pageService.DisplayAlert("Вы действительно хотите отметить выбранные слова как выученные? Слова будут перенесены в раздел \"ВЫУЧЕНО\"", $"Количество выбранных слов: {SelectedItems.Count}", "да", "нет");
+            if (!isConfirmed)
+            {
+                return;
+            }
+
+            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
+            {
+                SelectedItems.ForEach(i => db.Words.Find(i.Id).IsLearned = true);
+                db.SaveChanges();
+            }
+
+            MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
+
+            await CancelMultiselect();
+            await _pageService.DispayToast("Слова перенесены в раздел \"НЕВЫУЧЕНО\"");
         }
     }
 }

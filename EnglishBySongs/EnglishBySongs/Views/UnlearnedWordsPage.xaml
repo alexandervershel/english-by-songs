@@ -104,7 +104,7 @@
                        VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
+                        <TapGestureRecognizer Command="{Binding TransferToLearnedWordsCommand}"/>
                     </Label.GestureRecognizers>
 
                 </Label>
