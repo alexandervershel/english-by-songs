@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels"
-             xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures" xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="EnglishBySongs.Views.SongsListPage">
 
     <ContentPage.BindingContext>
@@ -14,7 +15,8 @@
             
             <SearchBar x:Name="SongsSearchBar"
                        Text="{Binding ItemsSearchQuery}"
-                       Placeholder="Поиск"/>
+                       Placeholder="Поиск"
+                       IsVisible="{Binding AllItems, Converter={xct:ListIsNotNullOrEmptyConverter}}"/>
 
             <mr:ListView ItemsSource="{Binding Items}"
                          RowHeight="100"
@@ -65,7 +67,7 @@
                 </ListView.ItemTemplate>
             </mr:ListView>
 
-            <Label Text="Выученных слов нет. Чтобы добавить новую песню, перейдите на страницу &quot;ДОБАВЛЕНИЕ&quot;"
+            <Label Text="Песен нет. Чтобы добавить новую песню, перейдите на страницу &quot;ДОБАВЛЕНИЕ&quot;"
                    IsVisible="{Binding AllItems, Converter={xct:ListIsNullOrEmptyConverter}}"
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"

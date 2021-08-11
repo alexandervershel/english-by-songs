@@ -265,7 +265,7 @@ namespace EnglishBySongs.ViewModels
                 AllWords = db.Words.ToList();
             }
 
-            NotAddedWords.RemoveAll(w => AllWords.Any(x => x.Foreign == w.Foreign));// && x.IsLearned));
+            NotAddedWords.RemoveAll(w => AllWords.Any(x => x.Foreign == w.Foreign));
 
             await _pageService.PushAsync(new WordsAddingPage(this));
         }
@@ -333,10 +333,10 @@ namespace EnglishBySongs.ViewModels
                         {
                             translations.ForEach(t => word.Translations.Add(t));
                         }
-                        else
-                        {
-                            word.Translations = new List<Translation>() { new Translation() { Text = null } };
-                        }
+                        //else
+                        //{
+                        //    word.Translations = new List<Translation>() { new Translation() { Text = null } };
+                        //}
                     }
 
                     word.Songs.Add(song);

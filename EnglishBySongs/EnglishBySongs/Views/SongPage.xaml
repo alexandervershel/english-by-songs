@@ -85,7 +85,10 @@
                     </xct:Expander.Header>
 
                     <StackLayout HeightRequest="350">
-                        <ListView ItemsSource="{Binding PrimarySong.UnlearnedWords}">
+
+                        <ListView ItemsSource="{Binding PrimarySong.UnlearnedWords}"
+                                  IsVisible="{Binding PrimarySong.UnlearnedWords, Converter={xct:ListIsNotNullOrEmptyConverter}}"
+                                  SelectionMode="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
@@ -93,25 +96,6 @@
                                             <Label Text="{Binding Foreign}"
                                                FontSize="24"
                                                FontAttributes="Bold"/>
-
-                                            <!--<CollectionView ItemsSource="{Binding Translations}">
-                                            <CollectionView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Label BackgroundColor="#dbdbdb"
-                                                           FontSize="22">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="{Binding Text, TargetNullValue='Перевод не найден'}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </CollectionView.ItemTemplate>
-                                            <CollectionView.ItemsLayout>
-                                                <LinearItemsLayout Orientation="Horizontal"
-                                                               ItemSpacing="3"/>
-                                            </CollectionView.ItemsLayout>
-                                        </CollectionView>-->
 
                                             <Label Text="{Binding Translations, Converter={StaticResource ListToStringConverter}}"
                                                FontSize="22"/>
@@ -121,6 +105,15 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+
+                        <Label Text="Невыученных слов нет"
+                               IsVisible="{Binding PrimarySong.UnlearnedWords, Converter={xct:ListIsNullOrEmptyConverter}}"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalTextAlignment="Center"
+                               Margin="25, 0, 25, 0"
+                               FontSize="22"/>
+
                     </StackLayout>
                 </xct:Expander>
 
@@ -147,39 +140,33 @@
                         </StackLayout>
                     </xct:Expander.Header>
 
-                    <ListView ItemsSource="{Binding PrimarySong.LearnedWords}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout Margin="5">
-                                        <Label Text="{Binding Foreign}"
+                    <StackLayout HeightRequest="350">
+                        <ListView ItemsSource="{Binding PrimarySong.LearnedWords}"
+                                  IsVisible="{Binding PrimarySong.LearnedWords, Converter={xct:ListIsNotNullOrEmptyConverter}}"
+                                  SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout Margin="5">
+                                            <Label Text="{Binding Foreign}"
                                                FontSize="24"
                                                FontAttributes="Bold"/>
 
-                                        <!--<CollectionView ItemsSource="{Binding Translations}">
-                                            <CollectionView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Label BackgroundColor="#dbdbdb"
-                                                       FontSize="Subtitle">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="{Binding Text, TargetNullValue='Перевод не найден'}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </CollectionView.ItemTemplate>
-                                            <CollectionView.ItemsLayout>
-                                                <LinearItemsLayout Orientation="Horizontal"
-                                                               ItemSpacing="3"/>
-                                            </CollectionView.ItemsLayout>
-                                        </CollectionView>-->
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
-                                    </StackLayout>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        <Label Text="Выыученных слов нет"
+                               IsVisible="{Binding PrimarySong.LearnedWords, Converter={xct:ListIsNullOrEmptyConverter}}"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalTextAlignment="Center"
+                               Margin="25, 0, 25, 0"
+                               FontSize="22"/>
+                    </StackLayout>
+
                 </xct:Expander>
 
             </StackLayout>

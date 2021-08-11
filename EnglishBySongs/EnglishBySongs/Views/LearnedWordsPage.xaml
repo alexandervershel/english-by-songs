@@ -21,7 +21,8 @@
 
             <SearchBar x:Name="LearnedWordsSearchBar"
                        Text="{Binding ItemsSearchQuery}"
-                       Placeholder="Поиск"/>
+                       Placeholder="Поиск"
+                       IsVisible="{Binding AllItems, Converter={xct:ListIsNotNullOrEmptyConverter}}"/>
 
             <mr:ListView ItemsSource="{Binding Items}"
                          RowHeight="75"
@@ -51,7 +52,18 @@
                                 <ScrollView Orientation="Horizontal"
                                             HorizontalScrollBarVisibility="Never">
                                     <Label Text="{Binding Songs, Converter={StaticResource ListToStringConverter}}"
-                                           FontSize="22"/>
+                                           FontSize="22">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Songs, Converter={xct:ListIsNullOrEmptyConverter}}"
+                                                         Value="True">
+                                                <Setter Property="Text"
+                                                        Value="Песен с таким словом не добавлено"/>
+                                                <Setter Property="TextColor"
+                                                        Value="LightGray"/>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
                                 </ScrollView>
 
                             </StackLayout>
