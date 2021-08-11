@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -14,8 +13,6 @@ namespace EnglishBySongs.ViewModels
     {
         public UnlearnedWordsListViewModel() : base()
         {
-            
-
             MessagingCenter.Subscribe<WordsAddingBySongPageViewModel>(
                 this,
                 "WordsAdded",
@@ -27,6 +24,14 @@ namespace EnglishBySongs.ViewModels
             MessagingCenter.Subscribe<WordViewModel>(
                 this,
                 "WordUpdated",
+                async (sender) =>
+                {
+                    await RefreshAsync();
+                });
+
+            MessagingCenter.Subscribe<ListViewModel<SongItem>>(
+                this,
+                "SongsDeleted",
                 async (sender) =>
                 {
                     await RefreshAsync();
@@ -51,6 +56,9 @@ namespace EnglishBySongs.ViewModels
 
         protected override async Task DeleteItems(object obj)
         {
+            if (SelectedItems.Count == 0)
+                return;
+
             bool isConfirmed = await _pageService.DisplayAlert("Вы действительно хотите удалить выбранные слова?", $"Количество выбранных слов: {SelectedItems.Count}", "да", "нет");
             if (!isConfirmed)
             {
@@ -64,6 +72,9 @@ namespace EnglishBySongs.ViewModels
             }
 
             await RefreshAsync();
+            MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
+
+            await CancelMultiselect();
         }
     }
 }

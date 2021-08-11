@@ -4,7 +4,6 @@
              xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels;assembly=EnglishBySongs"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="EnglishBySongs.Views.UnlearnedWordsPage">
 
     <ContentPage.BindingContext>

@@ -9,6 +9,7 @@ using Xamarin.Forms.Internals;
 
 namespace EnglishBySongs.ViewModels
 {
+    // TODO: rename to 'MultiselectListViewModel'
     public class ListViewModel<T> : BaseViewModel where T : ISelectable, IEditable, ISearchable
     {
         public ListViewModel()

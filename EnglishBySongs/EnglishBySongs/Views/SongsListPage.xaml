@@ -65,7 +65,7 @@
                 </ListView.ItemTemplate>
             </mr:ListView>
 
-            <Label Text="Выученных слов нет. Чтобы добавить новые слова, перейдите на страницу &quot;ДОБАВЛЕНИЕ&quot;"
+            <Label Text="Выученных слов нет. Чтобы добавить новую песню, перейдите на страницу &quot;ДОБАВЛЕНИЕ&quot;"
                    IsVisible="{Binding AllItems, Converter={xct:ListIsNullOrEmptyConverter}}"
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"

@@ -3,6 +3,7 @@ using EnglishBySongs.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
 namespace EnglishBySongs.ViewModels
@@ -11,13 +12,21 @@ namespace EnglishBySongs.ViewModels
     {
         public SongsListViewModel() : base()
         {
-            //MessagingCenter.Subscribe<WordsAddingBySongPageViewModel>(
-            //    this,
-            //    "SongAdded",
-            //    async (sender) =>
-            //    {
-            //        await RefreshAsync();
-            //    });
+            MessagingCenter.Subscribe<WordsAddingBySongPageViewModel>(
+                this,
+                "SongAdded",
+                async (sender) =>
+                {
+                    await RefreshAsync();
+                });
+
+            MessagingCenter.Subscribe<ListViewModel<WordItem>>(
+                this,
+                "WordsListChanged",
+                async (sender) =>
+                {
+                    await RefreshAsync();
+                });
         }
 
         protected override async Task ReadCollectionFromDb()
@@ -38,7 +47,10 @@ namespace EnglishBySongs.ViewModels
 
         protected override async Task DeleteItems(object obj)
         {
-            bool isConfirmed = await _pageService.DisplayAlert("Вы действительно хотите удалить выбранные песни? Будут также удалены слова, которые встречаются только в этой песне", $"Количество выбранных песен: {SelectedItems.Count}", "да", "нет");
+            if (SelectedItems.Count == 0)
+                return;
+
+            bool isConfirmed = await _pageService.DisplayAlert("Вы действительно хотите удалить выбранные песни?", $"Количество выбранных песен: {SelectedItems.Count}", "да", "нет");
             if (!isConfirmed)
             {
                 return;
@@ -51,6 +63,9 @@ namespace EnglishBySongs.ViewModels
             }
 
             await RefreshAsync();
+            MessagingCenter.Send((ListViewModel<SongItem>)this, "SongsDeleted");
+
+            await CancelMultiselect();
         }
     }
 }

@@ -28,10 +28,19 @@ namespace EnglishBySongs.ViewModels
                 {
                     await RefreshAsync();
                 });
+
+            MessagingCenter.Subscribe<ListViewModel<SongItem>>(
+                this,
+                "SongsDeleted",
+                async (sender) =>
+                {
+                    await RefreshAsync();
+                });
         }
 
         protected override async Task ReadCollectionFromDb()
         {
+            Items.Clear();
             List<Word> words;
 
             using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
@@ -47,6 +56,9 @@ namespace EnglishBySongs.ViewModels
 
         protected override async Task DeleteItems(object obj)
         {
+            if (SelectedItems.Count == 0)
+                return;
+
             bool isConfirmed = await _pageService.DisplayAlert("Вы действительно хотите удалить выбранные слова?", $"Количество выбранных слов: {SelectedItems.Count}", "да", "нет");
             if (!isConfirmed)
             {
@@ -56,11 +68,13 @@ namespace EnglishBySongs.ViewModels
             using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
             {
                 SelectedItems.ForEach(i => db.Words.Remove(db.Words.Find(i.Id)));
-                
                 db.SaveChanges();
             }
 
             await RefreshAsync();
+            MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
+
+            await CancelMultiselect();
         }
     }
 }
