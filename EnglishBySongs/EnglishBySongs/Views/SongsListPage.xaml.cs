@@ -16,7 +16,7 @@ namespace EnglishBySongs.Views
             _songsListViewModel = BindingContext as SongsListViewModel;
         }
 
-        private async void SongsListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private void SongsListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             _songsListViewModel.ItemTappedCommand.Execute(e.Item);
         }

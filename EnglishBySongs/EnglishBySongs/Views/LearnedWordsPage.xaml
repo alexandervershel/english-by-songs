@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels;assembly=EnglishBySongs"
-             xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
              x:Class="EnglishBySongs.Views.LearnedWordsPage">
 
     <ContentPage.BindingContext>
@@ -24,7 +24,6 @@
                        Placeholder="Поиск"/>
 
             <mr:ListView ItemsSource="{Binding Items}"
-                         x:Name="LearnedWordsListView"
                          RowHeight="75"
                          SeparatorColor="Gray"
                          SelectionMode="None"
@@ -39,7 +38,7 @@
                                          Margin="5">
 
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Path=Foreign}"
+                                    <Label Text="{Binding Foreign}"
                                            FontSize="24"
                                            FontAttributes="Bold"/>
 
@@ -69,19 +68,19 @@
                    FontSize="22"/>
 
             <StackLayout Orientation="Horizontal"
-                         HeightRequest="50"
                          VerticalOptions="End"
                          HorizontalOptions="FillAndExpand"
                          BackgroundColor="Gray"
-                         IsVisible="{Binding IsMultiselect}">
+                         IsVisible="{Binding IsMultiselect}"
+                         Padding="0, 10, 0, 10">
 
                 <Label Text="удалить"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
-
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center"
+                       Margin="10, 0, 0, 0">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding DeleteWordsCommand}"/>
@@ -89,13 +88,12 @@
 
                 </Label>
 
-                <Label Text="перенести в выученные"
+                <Label Text="выучено"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
-
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
@@ -106,10 +104,9 @@
                 <Label Text="выделить все"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
-
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
@@ -120,9 +117,9 @@
                 <Label Text="отмена"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding CancelMultiselectCommand}"/>

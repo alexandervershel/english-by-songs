@@ -57,7 +57,7 @@
                                 <ScrollView Orientation="Horizontal"
                                             HorizontalScrollBarVisibility="Never"
                                             VerticalOptions="EndAndExpand">
-                                    <Label Text="{Binding Songs, Converter={StaticResource ListToStringConverter}}}"
+                                    <Label Text="{Binding Songs, Converter={StaticResource ListToStringConverter}}"
                                            FontSize="22"/>
                                 </ScrollView>
 
@@ -74,20 +74,21 @@
                    HorizontalOptions="CenterAndExpand"
                    Margin="25, 0, 25, 0"
                    FontSize="22"/>
-
+            
             <StackLayout Orientation="Horizontal"
-                         HeightRequest="50"
                          VerticalOptions="End"
                          HorizontalOptions="FillAndExpand"
                          BackgroundColor="Gray"
-                         IsVisible="{Binding IsMultiselect}">
+                         IsVisible="{Binding IsMultiselect}"
+                         Padding="0, 10, 0, 10">
 
                 <Label Text="удалить"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center"
+                       Margin="10, 0, 0, 0">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding DeleteWordsCommand}"/>
@@ -95,12 +96,12 @@
 
                 </Label>
 
-                <Label Text="перенести в выученные"
+                <Label Text="выучено"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
@@ -111,9 +112,9 @@
                 <Label Text="выделить все"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding SelectAllCommand}"/>
@@ -124,9 +125,9 @@
                 <Label Text="отмена"
                        TextDecorations="Underline"
                        TextColor="OrangeRed"
-                       FontSize="22"
-                       HorizontalOptions="End"
-                       Margin="5, 0, 5, 0">
+                       FontSize="17"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding CancelMultiselectCommand}"/>
