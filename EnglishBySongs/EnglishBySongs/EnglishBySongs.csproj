@@ -81,4 +81,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controls\Behaviors\" />
+    <Folder Include="Controls\Converters\" />
+  </ItemGroup>
 </Project>
