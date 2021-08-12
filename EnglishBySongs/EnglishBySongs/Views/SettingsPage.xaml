@@ -4,9 +4,97 @@
              x:Class="EnglishBySongs.Views.SettingsPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Настройки"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <TableView Intent="Settings">
+                <TableRoot>
+                    <TableSection Title="Перевод">
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Автоперевод невыученных слов"
+                                       FontSize="22"
+                                       HorizontalOptions="Start"
+                                       VerticalOptions="CenterAndExpand"/>
+                                <Switch IsToggled="True"
+                                       HorizontalOptions="EndAndExpand"
+                                       VerticalOptions="CenterAndExpand"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+                    
+                    <TableSection Title="Сортировка слов">
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Picker Title="Сортировка"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="300"
+                                        FontSize="17">
+                                    <Picker.Items>
+                                        <x:String>
+                                            По дате добавления (нов.-стар.)
+                                        </x:String>
+                                        <x:String>
+                                            По дате добавления (стар.-нов.)
+                                        </x:String>
+                                        <x:String>
+                                            По слову на иностранном
+                                        </x:String>
+                                        <x:String>
+                                            По слову на иностранном (обр.)
+                                        </x:String>
+                                        <x:String>
+                                            По переводу слова
+                                        </x:String>
+                                        <x:String>
+                                            По переводу слова (обр.)
+                                        </x:String>
+                                        <x:String>
+                                            По песням
+                                        </x:String>
+                                        <x:String>
+                                            По песням (обр.)
+                                        </x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+
+
+                    <TableSection Title="Сортировка песен">
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Picker Title="Сортировка"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="300"
+                                        FontSize="17">
+                                    <Picker.Items>
+                                        <x:String>
+                                            По дате добавления (нов.-стар.)
+                                        </x:String>
+                                        <x:String>
+                                            По дате добавления (стар.-нов.)
+                                        </x:String>
+                                        <x:String>
+                                            По названию
+                                        </x:String>
+                                        <x:String>
+                                            По названию (обр.)
+                                        </x:String>
+                                        <x:String>
+                                            По исполнителю
+                                        </x:String>
+                                        <x:String>
+                                            По исполнителю (обр.)
+                                        </x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
