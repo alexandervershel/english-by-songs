@@ -31,29 +31,13 @@
                     </ScrollView>
                 </StackLayout>
 
-                <StackLayout x:Name="ManuallyLyricsAddingStackLayout"
-                         IsVisible="{Binding ManuallyLyricsAddingStackLayoutIsVisible}">
-                    <Label Text="Текст песни"
-                       FontAttributes="Bold"
-                       FontSize="Medium"
-                       HorizontalTextAlignment="Center"/>
-
-                    <Editor x:Name="LyricsEditor"
-                        Text="{Binding Lyrics}"
-                        Placeholder="Вставьте скопированный текст песни или введите его вручную"
-                        HeightRequest="400">
-                    </Editor>
-
-                    <Button Text="Выделить слова"
-                        Margin="50, 10, 50, 10"
-                        Command="{Binding ExtractWordsCommand}"/>
-                </StackLayout>
-
                 <StackLayout x:Name="LyricsAreNotFoundStackLayout"
                          IsVisible="{Binding LyricsAreNotFoundStackLayoutIsVisible, Mode=TwoWay}">
-                    <Label HorizontalOptions="Center"
-                           FontSize="Medium"
-                           Text="Текст песни не найден. Проверьте корректность ввода исполнителя и названия песни"/>
+                    <Label Text="Текст песни не найден. Проверьте корректность ввода исполнителя и названия песни"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           Margin="25, 50, 25, 0"
+                           FontSize="22"/>
                 </StackLayout>
 
                 <Frame VerticalOptions="CenterAndExpand"

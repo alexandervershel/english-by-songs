@@ -72,16 +72,6 @@ namespace EnglishBySongs.ViewModels
 
         private bool _manuallyLyricsAddingStackLayoutIsVisible;
 
-        public bool ManuallyLyricsAddingStackLayoutIsVisible
-        {
-            get { return _manuallyLyricsAddingStackLayoutIsVisible; }
-            set
-            {
-                SetValue(ref _manuallyLyricsAddingStackLayoutIsVisible, value);
-                OnPropertyChanged(nameof(ManuallyLyricsAddingStackLayoutIsVisible));
-            }
-        }
-
         private bool _songIsAlreadyAddedStachLayoutIsVisible;
 
         public bool SongIsAlreadyAddedStachLayoutIsVisible
@@ -213,7 +203,6 @@ namespace EnglishBySongs.ViewModels
             Lyrics = string.Empty;
             FoundLyricsStackLayoutIsVisible = false;
             LyricsAreNotFoundStackLayoutIsVisible = false;
-            ManuallyLyricsAddingStackLayoutIsVisible = false;
             SongIsAlreadyAddedStachLayoutIsVisible = false;
 
             using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
@@ -337,7 +326,6 @@ namespace EnglishBySongs.ViewModels
 
             Performer = string.Empty;
             SongName = string.Empty;
-            ManuallyLyricsAddingStackLayoutIsVisible = false;
             FoundLyricsStackLayoutIsVisible = false;
 
             MessagingCenter.Send(this, "WordsAdded");
