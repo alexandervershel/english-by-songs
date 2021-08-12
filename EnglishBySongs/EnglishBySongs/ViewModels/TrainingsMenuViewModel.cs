@@ -1,6 +1,8 @@
-﻿using EnglishBySongs.Views;
+﻿using EnglishBySongs.Data;
+using EnglishBySongs.Views;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -22,6 +24,17 @@ namespace EnglishBySongs.ViewModels
 
         private async Task StartTraining(string x)
         {
+            bool trainingCannotBeStarted;
+            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
+            {
+                trainingCannotBeStarted = db.Words.Where(w => !w.IsLearned).ToList().Count == 0;
+            }
+            if (trainingCannotBeStarted)
+            {
+                await _pageService.DisplayAlert("Недостаточно слов", "Для начала тренировки перейдите в раздел \"ДОБАВЛЕНИЕ\" и добавьте неизвестные вам слова", "ок");
+                return;
+            }
+
             switch (x)
             {
                 case "0":

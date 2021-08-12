@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:EnglishBySongs.ViewModels"
-             xmlns:converters="clr-namespace:EnglishBySongs.Controls.Converters"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:WordsAddingBySongPageViewModel"
              x:Class="EnglishBySongs.Views.WordsAddingBySongPage"
@@ -42,12 +41,11 @@
             <StackLayout x:Name="NoInternetConnectionStackLayout"
                          IsVisible="{Binding IsConnectedToInternet, Mode=TwoWay, Converter={StaticResource InvertedBoolConverter}}"
                          Margin="25">
+                
                 <Label HorizontalOptions="Center"
                        FontSize="22"
-                       Text="Нет подключения к интернету. Можете ввести текст песни вручную"/>
-
-                <Button Text="Ввести текст вручную"
-                        Margin="25, 0, 25, 0"/>
+                       Text="Нет подключения к интернету"/>
+                
             </StackLayout>
             
             <StackLayout x:Name="SongIsAlreadyAddedStachLayout"

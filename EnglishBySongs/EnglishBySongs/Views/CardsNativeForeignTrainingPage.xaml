@@ -25,17 +25,6 @@
                          HorizontalOptions="Start"
                          Command="{Binding PopPageCommand}"/>
 
-            <!--<Label FontSize="Title"
-                   HorizontalOptions="CenterAndExpand">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{Binding Source={x:Reference WordsCarouselView}, Path=Position}"/>
-                        <Span Text="/"/>
-                        <Span Text="{Binding Words.Count}"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>-->
-            
             <StackLayout VerticalOptions="Start"
                          HeightRequest="100">
                 <Label Text="{Binding CurrentWord.Songs, Converter={StaticResource ListToStringConverter}}"

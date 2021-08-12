@@ -31,7 +31,6 @@ namespace EnglishBySongs.ViewModels
             GetLyricsCommand = new Command(async () => await GetLyrics());
             ExtractWordsCommand = new Command(async () => await ExtractWords());
             AddSelectedWordsCommand = new Command(async () => await AddSelectedWords());
-            GetLyricsManuallyCommand = new Command(() => GetLyricsManually());
             HideAddedWordsCommand = new Command(() => SwapLists());
         }
 
@@ -42,8 +41,6 @@ namespace EnglishBySongs.ViewModels
         public ICommand ExtractWordsCommand { get; private set; }
 
         public ICommand AddSelectedWordsCommand { get; private set; }
-
-        public ICommand GetLyricsManuallyCommand { get; private set; }
 
         public ICommand HideAddedWordsCommand { get; private set; }
 
@@ -246,12 +243,6 @@ namespace EnglishBySongs.ViewModels
 
             FoundLyricsStackLayoutIsVisible = true;
 
-        }
-
-        private void GetLyricsManually()
-        {
-            LyricsAreNotFoundStackLayoutIsVisible = false;
-            ManuallyLyricsAddingStackLayoutIsVisible = true;
         }
 
         private async Task ExtractWords()

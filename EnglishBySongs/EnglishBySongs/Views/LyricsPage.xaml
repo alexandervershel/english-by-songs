@@ -52,17 +52,8 @@
                 <StackLayout x:Name="LyricsAreNotFoundStackLayout"
                          IsVisible="{Binding LyricsAreNotFoundStackLayoutIsVisible, Mode=TwoWay}">
                     <Label HorizontalOptions="Center"
-                       FontSize="Medium">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Текст песни не найден"/>
-                                <Span Text="Проверьте корректность ввода исполнителя и названия песни, либо введите текст вручную"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-
-                    <Button Text="Ввести текст вручную"
-                        Command="{Binding GetLyricsManuallyCommand}"/>
+                           FontSize="Medium"
+                           Text="Текст песни не найден. Проверьте корректность ввода исполнителя и названия песни"/>
                 </StackLayout>
 
                 <Frame VerticalOptions="CenterAndExpand"
