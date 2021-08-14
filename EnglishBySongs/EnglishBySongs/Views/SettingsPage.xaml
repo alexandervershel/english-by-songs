@@ -20,7 +20,7 @@
                                        FontSize="22"
                                        HorizontalOptions="Start"
                                        VerticalOptions="CenterAndExpand"/>
-                                <Switch IsToggled="True"
+                                <Switch IsToggled="{Binding AutoTranslatingIsSwitchedOn}"
                                        HorizontalOptions="EndAndExpand"
                                        VerticalOptions="CenterAndExpand"/>
                             </StackLayout>

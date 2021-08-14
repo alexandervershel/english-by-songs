@@ -30,10 +30,11 @@ namespace EnglishBySongs.ViewModels
 
     class SettingsViewModel : BaseViewModel
     {
-
         public SettingsViewModel()
         {
             _pageService = new PageService();
+
+            _autoTranslatingIsSwitchedOn = Preferences.Get("AutoTranslating", true);
 
             _wordsSortingMode = (WordsSortingModes)Preferences.Get("WordsSortingMode", 2);
             _wordsSortingModes = new List<string>
@@ -61,6 +62,19 @@ namespace EnglishBySongs.ViewModels
         }
 
         protected IPageService _pageService;
+
+        private bool _autoTranslatingIsSwitchedOn;
+
+        public bool AutoTranslatingIsSwitchedOn
+        {
+            get { return _autoTranslatingIsSwitchedOn; }
+            set
+            {
+                SetValue(ref _autoTranslatingIsSwitchedOn, value);
+                OnPropertyChanged(nameof(AutoTranslatingIsSwitchedOn));
+                Preferences.Set("AutoTranslating", _autoTranslatingIsSwitchedOn);
+            }
+        }
 
         private List<string> _wordsSortingModes;
 

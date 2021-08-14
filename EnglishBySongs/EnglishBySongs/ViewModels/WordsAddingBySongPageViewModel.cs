@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
@@ -255,7 +256,6 @@ namespace EnglishBySongs.ViewModels
             IsBusy = true;
             using (var db = new EnglishBySongsDbContext())
             {
-                WordsTranslationsParser wordsTranslationsParser = new WordsTranslationsParser();
 
                 Song song = new Song()
                 {
@@ -267,10 +267,9 @@ namespace EnglishBySongs.ViewModels
 
                 bool isLearned;
                 Word word;
-                List<Translation> translations;
 
                 List<Word> words = _listsAreSwaped ? NotAddedWords : Words;
-
+                bool autoTranslatingIsSwitchedOn = Preferences.Get("AutoTranslating", true);
                 foreach (var w in words)
                 {
                     isLearned = !SelectedWords.Any(p => ((Word)p).Foreign == w.Foreign);
@@ -287,19 +286,19 @@ namespace EnglishBySongs.ViewModels
                     {
                         if (word.IsLearned)
                             word.IsLearned = isLearned;
-                        //word.IsLearned = word.IsLearned ? isLearned : word.IsLearned; // = isLearned;
                     }
 
                     // TODO: выделенные слова, при их присутствии в выученных словах, переносить в невыученыне
-                    if (!isLearned && word.Translations.Count == 0)
+                    if (!isLearned && word.Translations.Count == 0 && autoTranslatingIsSwitchedOn)
                     {
+                        WordsTranslationsParser wordsTranslationsParser = new WordsTranslationsParser();
+                        List<Translation> translations;
                         // TODO: убрать промежуточную коллекцию
                         translations = new List<Translation>();
                         List<string> tr = await wordsTranslationsParser.TranslateAsync(w.Foreign);
                         if (tr != null)
                         {
                             tr.ForEach(t => translations.Add(new Translation { Text = t }));
-
                             foreach (var t in translations)
                             {
                                 if (await db.Translations.FirstOrDefaultAsync(t1 => t1.Text == t.Text) == null)
@@ -308,17 +307,11 @@ namespace EnglishBySongs.ViewModels
                                 }
                             }
                         }
-
                         if (translations.Count != 0)
                         {
                             translations.ForEach(t => word.Translations.Add(t));
                         }
-                        //else
-                        //{
-                        //    word.Translations = new List<Translation>() { new Translation() { Text = null } };
-                        //}
                     }
-
                     word.Songs.Add(song);
                 }
                 db.SaveChanges();
