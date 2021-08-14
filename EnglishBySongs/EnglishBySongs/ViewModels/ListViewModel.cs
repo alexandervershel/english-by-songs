@@ -124,6 +124,7 @@ namespace EnglishBySongs.ViewModels
         protected async Task RefreshAsync()
         {
             await ReadCollectionFromDb();
+            await Sort();
             AllItems = Items;
         }
 

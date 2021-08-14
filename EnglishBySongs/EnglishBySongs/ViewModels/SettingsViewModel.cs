@@ -38,25 +38,25 @@ namespace EnglishBySongs.ViewModels
             _wordsSortingMode = (WordsSortingModes)Preferences.Get("WordsSortingMode", 2);
             _wordsSortingModes = new List<string>
             {
-                "AddingDate",
-                "AddingDateDescending",
-                "Foreign",
-                "ForeignDescending",
-                "Translations",
-                "TranslationsDescending",
-                "Songs",
-                "SongsDescending"
+                "По дате добавления",
+                "По дате добавления (обр.)",
+                "По слову на иностранном",
+                "По слову на иностранном (обр.)",
+                "По переводу",
+                "По переводу (обр.)",
+                "По песням",
+                "По песням (обр.)"
             };
 
             _songsSortingMode = (SongsSortingModes)Preferences.Get("SongsSortingMode", 2);
             _songsSortingModes = new List<string>
             {
-                "AddingDate",
-                "AddingDateDescending",
-                "Name",
-                "NameDescending",
-                "Artist",
-                "ArtistDescending"
+                "По дате добавления",
+                "По дате добавления (обр.)",
+                "По названию песни",
+                "По названию песни (обр.)",
+                "По исполнителю",
+                "По исполнителю (обр.)"
             };
         }
 
