@@ -12,19 +12,12 @@ namespace EnglishBySongs.ViewModels
 {
     public class WordViewModel : BaseViewModel
     {
-        private IPageService _pageService;
-
-        public ICommand SaveChangesCommand { get; private set; }
-
-        public ICommand AddNewTranslationCommand { get; private set; }
-
-        public ICommand RemoveTranslationCommand { get; private set; }
-
         public WordViewModel()
         {
             SaveChangesCommand = new Command(async () => await SaveChanges());
             AddNewTranslationCommand = new Command(async () => await AddNewTranslation());
             RemoveTranslationCommand = new Command(async (translation) => await RemoveTranslation(translation));
+            TranslateWordCommand = new Command(async () => await TranslateWord());
 
             _pageService = new PageService();
         }
@@ -41,6 +34,16 @@ namespace EnglishBySongs.ViewModels
             }
             Songs = word.Songs.ToList();
         }
+
+        private IPageService _pageService;
+
+        public ICommand SaveChangesCommand { get; private set; }
+
+        public ICommand AddNewTranslationCommand { get; private set; }
+
+        public ICommand RemoveTranslationCommand { get; private set; }
+
+        public ICommand TranslateWordCommand { get; private set; }
 
         private Word _primaryWord;
 
@@ -76,6 +79,18 @@ namespace EnglishBySongs.ViewModels
             {
                 SetValue(ref _isLearned, value);
                 OnPropertyChanged(nameof(IsLearned));
+            }
+        }
+
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                SetValue(ref _isBusy, value);
+                OnPropertyChanged(nameof(IsBusy));
             }
         }
 
@@ -150,6 +165,16 @@ namespace EnglishBySongs.ViewModels
         private async Task RemoveTranslation(object translation)
         {
             Translations.Remove((Translation)translation);
+        }
+
+        private async Task TranslateWord()
+        {
+            IsBusy = true;
+            WordsTranslationsParser translationsParser = new WordsTranslationsParser();
+            Translations.Clear();
+            (await translationsParser.TranslateAsync(_primaryWord.Foreign)).ForEach(t=>Translations.Add(new Translation() { Text = t}));
+            Translations = Translations;
+            IsBusy = false;
         }
     }
 }

@@ -170,7 +170,6 @@ namespace EnglishBySongs.ViewModels
             }
         }
 
-
         private bool _isBusy;
 
         public bool IsBusy

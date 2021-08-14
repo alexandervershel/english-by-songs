@@ -16,60 +16,90 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="{Binding Foreign, Mode=TwoWay}"
+        <Grid>
+            <StackLayout>
+                <Label Text="{Binding Foreign, Mode=TwoWay}"
                    HorizontalOptions="CenterAndExpand"
                    FontSize="24"
                    FontAttributes="Bold"
                    Margin="5"/>
 
-            <ListView ItemsSource="{Binding Translations, Mode=TwoWay}"
+                <ListView ItemsSource="{Binding Translations, Mode=TwoWay}"
                       IsVisible="{Binding Translations, Converter={xct:ListIsNotNullOrEmptyConverter}}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="9*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                </Grid.ColumnDefinitions>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="9*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <Entry Text="{Binding Text, Mode=TwoWay}"
+                                    <Entry Text="{Binding Text, Mode=TwoWay}"
                                        Grid.Column="0"
                                        Placeholder="Введите перевод"
                                        FontSize="22"/>
 
-                                <ImageButton x:Name="RemoveItemImageButton"
+                                    <ImageButton x:Name="RemoveItemImageButton"
                                              Source="delete.png"
                                              Grid.Column="1"
                                              HeightRequest="5"
                                              Clicked="RemoveItemImageButton_Clicked"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
-            <Label Text="У слова нет переводов. Чтобы добавить новый перевод, нажмите на кнопку &quot;Добавить перевод&quot; и в появившееся поле запишите перевод"
+                <Label Text="У слова нет переводов. Чтобы добавить новый перевод, нажмите на кнопку &quot;Добавить перевод&quot; и в появившееся поле запишите перевод"
                    IsVisible="{Binding Translations, Converter={xct:ListIsNullOrEmptyConverter}}"
                    HorizontalOptions="CenterAndExpand"
                    VerticalOptions="StartAndExpand"
                    Margin="25, 0, 25, 0"
                    FontSize="22"/>
 
-            <StackLayout HorizontalOptions="End"
+                <StackLayout HorizontalOptions="FillAndExpand"
                          Orientation="Horizontal">
-                <Label Text="Выучено"
+                    <Button Text="Перевести"
+                        FontSize="17"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="StartAndExpand"
+                        Command="{Binding TranslateWordCommand}"/>
+                    <Label Text="Выучено"
                        FontSize="24"
                        VerticalOptions="CenterAndExpand"/>
-                <CheckBox IsChecked="{Binding IsLearned}"/>
-            </StackLayout>
+                    <CheckBox IsChecked="{Binding IsLearned}"/>
+                </StackLayout>
 
-            <Button Text="Добавить перевод"
+                <Button Text="Добавить перевод"
                     Command="{Binding AddNewTranslationCommand}"/>
 
-            <Button Text="Сохранить изменения"
+                <Button Text="Сохранить изменения"
                     Command="{Binding SaveChangesCommand}"/>
-        </StackLayout>
+            </StackLayout>
+
+            <Frame VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   WidthRequest="150"
+                   HeightRequest="150"
+                   CornerRadius="20"
+                   BackgroundColor="Black"
+                   Opacity="0.5"
+                   IsVisible="{Binding IsBusy}">
+                <StackLayout>
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                           HorizontalOptions="CenterAndExpand"
+                                           VerticalOptions="CenterAndExpand"/>
+
+                    <Label Text="Слово переводится"
+                               FontSize="17"
+                               TextColor="OrangeRed"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="CenterAndExpand"/>
+                </StackLayout>
+            </Frame>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
