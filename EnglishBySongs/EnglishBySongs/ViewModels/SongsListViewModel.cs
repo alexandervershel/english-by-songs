@@ -2,7 +2,10 @@
 using EnglishBySongs.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -27,6 +30,14 @@ namespace EnglishBySongs.ViewModels
                 {
                     await RefreshAsync();
                 });
+
+            MessagingCenter.Subscribe<SettingsViewModel>(
+                this,
+                "SongsSortingModeChanged",
+                async (sender) =>
+                {
+                    await Sort();
+                });
         }
 
         protected override async Task ReadCollectionFromDb()
@@ -43,6 +54,36 @@ namespace EnglishBySongs.ViewModels
             {
                 Items.Add(new SongItem(song));
             }
+        }
+
+        protected override async Task Sort()
+        {
+            switch ((SongsSortingModes)Preferences.Get("SongsSortingMode", 2))
+            {
+                case SongsSortingModes.AddingDate:
+                    Items = new ObservableCollection<SongItem>(Items.OrderBy(x => x.Id));
+                    break;
+                case SongsSortingModes.AddingDateDescending:
+                    Items = new ObservableCollection<SongItem>(Items.OrderByDescending(x => x.Id));
+                    break;
+                case SongsSortingModes.Name:
+                    Items = new ObservableCollection<SongItem>(Items.OrderBy(x => x.Name));
+                    break;
+                case SongsSortingModes.NameDescending:
+                    Items = new ObservableCollection<SongItem>(Items.OrderByDescending(x => x.Name));
+                    break;
+                case SongsSortingModes.Artist:
+                    Items = new ObservableCollection<SongItem>(Items.OrderBy(x => x.Artist));
+                    break;
+                case SongsSortingModes.ArtistDescending:
+                    Items = new ObservableCollection<SongItem>(Items.OrderByDescending(x => x.Artist));
+                    break;
+                default:
+                    Items = new ObservableCollection<SongItem>(Items.OrderBy(x => x.Name));
+                    break;
+            }
+
+            AllItems = Items;
         }
 
         protected override async Task DeleteItems(object obj)

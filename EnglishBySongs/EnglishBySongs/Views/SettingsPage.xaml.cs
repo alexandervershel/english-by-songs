@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using EnglishBySongs.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace EnglishBySongs.Views
 {
     public partial class SettingsPage : ContentPage
     {
+        private SettingsViewModel _settingsViewModel;
         public SettingsPage()
         {
             InitializeComponent();
+
+            _settingsViewModel = BindingContext as SettingsViewModel;
         }
     }
 }

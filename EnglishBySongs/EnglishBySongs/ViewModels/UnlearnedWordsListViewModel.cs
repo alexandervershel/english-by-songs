@@ -1,10 +1,14 @@
 ﻿using EnglishBySongs.Data;
 using EnglishBySongs.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -39,7 +43,16 @@ namespace EnglishBySongs.ViewModels
                 {
                     await RefreshAsync();
                 });
+
+            MessagingCenter.Subscribe<SettingsViewModel>(
+                this,
+                "WordsSortingModeChanged",
+                async (sender) =>
+                {
+                    await Sort();
+                });
         }
+
         public ICommand TransferToLearnedWordsCommand { get; private set; }
 
         protected override async Task ReadCollectionFromDb()
@@ -55,6 +68,40 @@ namespace EnglishBySongs.ViewModels
             foreach (var word in words)
             {
                 Items.Add(new WordItem(word));
+            }
+        }
+
+        protected override async Task Sort()
+        {
+            switch ((WordsSortingModes)Preferences.Get("WordsSortingMode", 2))
+            {
+                case WordsSortingModes.AddingDate:
+                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => x.Id));
+                    break;
+                case WordsSortingModes.AddingDateDescending:
+                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => x.Id));
+                    break;
+                case WordsSortingModes.Foreign:
+                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => x.Foreign));
+                    break;
+                case WordsSortingModes.ForeignDescending:
+                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => x.Foreign));
+                    break;
+                case WordsSortingModes.Translations:
+                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => string.Join("", x.Translations)).OrderByDescending(x => x.Translations?.Any()));
+                    break;
+                case WordsSortingModes.TranslationsDescending:
+                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => string.Join("", x.Translations)).OrderByDescending(x => x.Translations?.Any()));
+                    break;
+                case WordsSortingModes.Songs:
+                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => string.Join("", x.Songs)).OrderByDescending(x => x.Songs?.Any()));
+                    break;
+                case WordsSortingModes.SongsDescending:
+                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => string.Join("", x.Songs)).OrderByDescending(x => x.Songs?.Any()));
+                    break;
+                default:
+                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => x.Foreign));
+                    break;
             }
         }
 

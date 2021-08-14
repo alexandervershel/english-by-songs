@@ -1,5 +1,4 @@
-﻿using EnglishBySongs.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,12 +14,10 @@ namespace EnglishBySongs.ViewModels
         public ListViewModel()
         {
             _pageService = new PageService();
-
             _isMultiselect = false;
-
             Items = new ObservableCollection<T>();
-
             ReadCollectionFromDb();
+            Sort();
             AllItems = Items;
 
             DisplayCheckBoxesCommand = new Command(async () => await DisplayCheckBoxes());
@@ -133,6 +130,11 @@ namespace EnglishBySongs.ViewModels
         protected virtual Task ReadCollectionFromDb()
         {
             return Task.FromResult(default(List<T>));
+        }
+
+        protected virtual Task Sort()
+        {
+            return Task.FromResult(default(object));
         }
 
         protected async Task ItemTapped(T item)

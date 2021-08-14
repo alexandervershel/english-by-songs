@@ -1,7 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="EnglishBySongs.Views.SettingsPage">
+
+    <ContentPage.BindingContext>
+        <viewmodel:SettingsViewModel/>
+    </ContentPage.BindingContext>
+    
     <ContentPage.Content>
         <StackLayout>
             <TableView Intent="Settings">
@@ -27,34 +34,9 @@
                                         HorizontalOptions="End"
                                         VerticalOptions="CenterAndExpand"
                                         WidthRequest="300"
-                                        FontSize="17">
-                                    <Picker.Items>
-                                        <x:String>
-                                            По дате добавления (нов.-стар.)
-                                        </x:String>
-                                        <x:String>
-                                            По дате добавления (стар.-нов.)
-                                        </x:String>
-                                        <x:String>
-                                            По слову на иностранном
-                                        </x:String>
-                                        <x:String>
-                                            По слову на иностранном (обр.)
-                                        </x:String>
-                                        <x:String>
-                                            По переводу слова
-                                        </x:String>
-                                        <x:String>
-                                            По переводу слова (обр.)
-                                        </x:String>
-                                        <x:String>
-                                            По песням
-                                        </x:String>
-                                        <x:String>
-                                            По песням (обр.)
-                                        </x:String>
-                                    </Picker.Items>
-                                </Picker>
+                                        FontSize="17"
+                                        ItemsSource="{Binding WordsSortingModes}"
+                                        SelectedIndex="{Binding WordsSortingMode, Converter={xct:EnumToIntConverter}}"/>
                             </StackLayout>
                         </ViewCell>
                     </TableSection>
@@ -67,28 +49,9 @@
                                         HorizontalOptions="End"
                                         VerticalOptions="CenterAndExpand"
                                         WidthRequest="300"
-                                        FontSize="17">
-                                    <Picker.Items>
-                                        <x:String>
-                                            По дате добавления (нов.-стар.)
-                                        </x:String>
-                                        <x:String>
-                                            По дате добавления (стар.-нов.)
-                                        </x:String>
-                                        <x:String>
-                                            По названию
-                                        </x:String>
-                                        <x:String>
-                                            По названию (обр.)
-                                        </x:String>
-                                        <x:String>
-                                            По исполнителю
-                                        </x:String>
-                                        <x:String>
-                                            По исполнителю (обр.)
-                                        </x:String>
-                                    </Picker.Items>
-                                </Picker>
+                                        FontSize="17"
+                                        ItemsSource="{Binding SongsSortingModes}"
+                                        SelectedIndex="{Binding SongsSortingMode, Converter={xct:EnumToIntConverter}}"/>
                             </StackLayout>
                         </ViewCell>
                     </TableSection>
