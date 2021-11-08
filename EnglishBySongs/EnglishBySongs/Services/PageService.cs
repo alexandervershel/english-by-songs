@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.CommunityToolkit.Extensions;
 
-namespace EnglishBySongs
+namespace EnglishBySongs.Services
 {
     public class PageService : IPageService
     {
