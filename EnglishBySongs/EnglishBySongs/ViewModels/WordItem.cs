@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EnglishBySongs.ViewModels
 {
-    public class WordItem : Word, ISelectable, IEditable, ISearchable
+    public class WordItem : Word, IListViewItemViewModel
     {
         private IPageService _pageService;
 
@@ -29,7 +29,7 @@ namespace EnglishBySongs.ViewModels
             Translations = word.Translations;
             Songs = word.Songs;
 
-            stringByWhichToFind = Foreign;
+            StringByWhichToFind = Foreign;
         }
 
         // TODO: перенести в базовый класс
@@ -45,7 +45,7 @@ namespace EnglishBySongs.ViewModels
             }
         }
 
-        public string stringByWhichToFind { get; set; }
+        public string StringByWhichToFind { get; set; }
 
         public async Task ToEditPage()
         {

@@ -10,7 +10,7 @@ using Xamarin.Forms.Internals;
 namespace EnglishBySongs.ViewModels
 {
     // TODO: rename to 'MultiselectListViewModel'
-    public class ListViewModel<T> : BaseViewModel where T : ISelectable, IEditable, ISearchable
+    public class ListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
     {
         public ListViewModel()
         {
@@ -99,7 +99,7 @@ namespace EnglishBySongs.ViewModels
                 //findedItems = findedItems.Where(i => i.stringByWhichToFind.Contains(_itemsSearchQuery));
                 //_items = new ObservableCollection<T>(findedItems);
 
-                Items = new ObservableCollection<T>(AllItems.Where(i => i.stringByWhichToFind.Contains(_itemsSearchQuery)).ToList());
+                Items = new ObservableCollection<T>(AllItems.Where(i => i.StringByWhichToFind.Contains(_itemsSearchQuery)).ToList());
 
                 //List<T> items = new List<T>();
                 //foreach (var item in Items)

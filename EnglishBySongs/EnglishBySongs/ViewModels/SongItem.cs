@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EnglishBySongs.ViewModels
 {
-    public class SongItem : Song, ISelectable, IEditable, ISearchable
+    public class SongItem : Song, IListViewItemViewModel
     {
         private IPageService _pageService;
 
@@ -18,7 +18,7 @@ namespace EnglishBySongs.ViewModels
             Artist = song.Artist;
             Lyrics = song.Lyrics;
             Words = song.Words;
-            stringByWhichToFind = Name;
+            StringByWhichToFind = Name;
         }
 
         private bool _isSelected;
@@ -31,7 +31,7 @@ namespace EnglishBySongs.ViewModels
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
-        public string stringByWhichToFind { get; set; }
+        public string StringByWhichToFind { get; set; }
 
         public async Task ToEditPage()
         {
