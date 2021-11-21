@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace EnglishBySongs.Models
+namespace Entities
 {
-    public class Translation
+    public class Translation : IModel
     {
         public int Id { get; set; }
 

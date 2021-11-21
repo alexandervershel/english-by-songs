@@ -8,11 +8,11 @@ namespace EnglishBySongs.Views
     public partial class WordsAddingPage : ContentPage
     {
 
-        public WordsAddingPage(WordsAddingBySongPageViewModel wordsAddingBySongPageViewModel)
+        public WordsAddingPage(SongSearchViewModel SongSearchPageViewModel)
         {
             InitializeComponent();
 
-            BindingContext = wordsAddingBySongPageViewModel;
+            BindingContext = SongSearchPageViewModel;
         }
     }
 }

@@ -1,20 +1,20 @@
-﻿using EnglishBySongs.Data;
-using EnglishBySongs.Models;
+﻿using Dal;
+using Dal.Repositories;
 using EnglishBySongs.Services;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Entities;
 
 namespace EnglishBySongs.ViewModels
 {
     class TrainingViewModel : BaseViewModel
     {
         private IPageService _pageService;
-
+        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
         public ICommand PopPageCommand { get; private set; }
 
         public ICommand EndTrainingCommand { get; private set; }
@@ -27,10 +27,7 @@ namespace EnglishBySongs.ViewModels
             EndTrainingCommand = new Command(async () => await EndTraining());
 
             Random rng = new Random();
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
-            {
-                _words = db.Words.Include(w => w.Translations).Include(w => w.Songs).Where(w => !w.IsLearned).ToList().OrderBy(a => rng.Next()).ToList();
-            }
+            _words = _wordRepository.GetAll(w => !w.IsLearned).OrderBy(a => rng.Next()).ToList();
         }
 
         private async Task PopPage()
@@ -41,14 +38,11 @@ namespace EnglishBySongs.ViewModels
         private async Task EndTraining()
         {
             List<Word> changedWords = Words.Where(w=>w.IsLearned).ToList();
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
+            foreach (Word word in changedWords)
             {
-                foreach (Word word in changedWords)
-                {
-                    (await db.Words.FirstOrDefaultAsync(w => w.Foreign == word.Foreign)).IsLearned = true;
-                }
-                db.SaveChanges();
+                _wordRepository.Get(w => w.Foreign == word.Foreign).IsLearned = true;
             }
+            _wordRepository.Save();
             MessagingCenter.Send(new WordViewModel(), "WordUpdated");
             await _pageService.PopAsync();
             await _pageService.DispayToast("Тренировка закончена");

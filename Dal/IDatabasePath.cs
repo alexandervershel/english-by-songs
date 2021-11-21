@@ -1,4 +1,4 @@
-﻿namespace EnglishBySongs
+﻿namespace Dal
 {
     public interface IDatabasePath
     {

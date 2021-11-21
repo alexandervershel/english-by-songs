@@ -1,5 +1,5 @@
-﻿using EnglishBySongs.Models;
-using EnglishBySongs.ViewModels;
+﻿using EnglishBySongs.ViewModels;
+using Entities;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

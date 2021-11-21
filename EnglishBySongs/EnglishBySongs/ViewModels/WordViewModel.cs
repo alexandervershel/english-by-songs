@@ -1,7 +1,8 @@
-﻿using EnglishBySongs.Data;
-using EnglishBySongs.Models;
+﻿using Core.Helpers;
+using Dal;
+using Dal.Repositories;
 using EnglishBySongs.Services;
-using Microsoft.EntityFrameworkCore;
+using Entities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,6 +14,15 @@ namespace EnglishBySongs.ViewModels
 {
     public class WordViewModel : BaseViewModel
     {
+        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        private readonly TranslationRepository _translationRepository = new TranslationRepository(EnglishBySongsDbContext.GetInstance());
+        private readonly WordsTranslationsParser _translationsParser = new WordsTranslationsParser();
+        private IPageService _pageService;
+        public ICommand SaveChangesCommand { get; private set; }
+        public ICommand AddNewTranslationCommand { get; private set; }
+        public ICommand RemoveTranslationCommand { get; private set; }
+        public ICommand TranslateWordCommand { get; private set; }
+        private Word _primaryWord;
         public WordViewModel()
         {
             SaveChangesCommand = new Command(async () => await SaveChanges());
@@ -35,19 +45,6 @@ namespace EnglishBySongs.ViewModels
             }
             Songs = word.Songs.ToList();
         }
-
-        private IPageService _pageService;
-
-        public ICommand SaveChangesCommand { get; private set; }
-
-        public ICommand AddNewTranslationCommand { get; private set; }
-
-        public ICommand RemoveTranslationCommand { get; private set; }
-
-        public ICommand TranslateWordCommand { get; private set; }
-
-        private Word _primaryWord;
-
         public Word ToWord()
         {
             return new Word()
@@ -121,36 +118,31 @@ namespace EnglishBySongs.ViewModels
 
         private async Task SaveChanges()
         {
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
+            Translation translation;
+            List<Translation> translations = new List<Translation>();
+            foreach (var tr in Translations.ToList())
             {
-                Translation translation;
-                List<Translation> translations = new List<Translation>();
-                foreach (var tr in Translations.ToList())
+                if ((translation = _translationRepository.Get(t => t.Text == tr.Text)) == null)
                 {
-                    if ((translation = await db.Translations.FirstOrDefaultAsync(t => t.Text == tr.Text)) == null)
+                    if (!string.IsNullOrWhiteSpace(tr.Text))
                     {
-                        if (!string.IsNullOrWhiteSpace(tr.Text))
-                        {
-                            translations.Add(tr);
-                            db.Translations.Add(tr);
-                        }
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(translation.Text))
-                        {
-                            translations.Add(translation);
-                        }
+                        translations.Add(tr);
+                        _translationRepository.Add(tr);
                     }
                 }
-                db.SaveChanges();
-
-                Word word = db.Words.Include(w => w.Translations).FirstOrDefault(w => w.Id == _primaryWord.Id);
-
-                word.Translations = translations;
-                word.IsLearned = IsLearned;
-                db.SaveChanges();
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(translation.Text))
+                    {
+                        translations.Add(translation);
+                    }
+                }
             }
+            _wordRepository.Save();
+            Word word = _wordRepository.Get(w => w.Id == _primaryWord.Id);
+            word.Translations = translations;
+            word.IsLearned = IsLearned;
+            _wordRepository.Save();
 
             MessagingCenter.Send(this, "WordUpdated");
             await _pageService.PopAsync();
@@ -171,9 +163,8 @@ namespace EnglishBySongs.ViewModels
         private async Task TranslateWord()
         {
             IsBusy = true;
-            WordsTranslationsParser translationsParser = new WordsTranslationsParser();
             Translations.Clear();
-            (await translationsParser.TranslateAsync(_primaryWord.Foreign)).ForEach(t=>Translations.Add(new Translation() { Text = t}));
+            (await _translationsParser.TranslateAsync(_primaryWord.Foreign)).ForEach(t => Translations.Add(new Translation() { Text = t }));
             Translations = Translations;
             IsBusy = false;
         }

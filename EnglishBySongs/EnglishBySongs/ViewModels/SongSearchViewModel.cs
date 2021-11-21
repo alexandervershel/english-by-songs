@@ -1,8 +1,9 @@
-﻿using EnglishBySongs.Data;
-using EnglishBySongs.Models;
+﻿using Core.Helpers;
+using Dal;
+using Dal.Repositories;
 using EnglishBySongs.Services;
 using EnglishBySongs.Views;
-using Microsoft.EntityFrameworkCore;
+using Entities;
 using Plugin.Connectivity;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,40 +14,34 @@ using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
 {
-    public class WordsAddingBySongPageViewModel : BaseViewModel
+    // TODO: name as SongSearchViewModel
+    public class SongSearchViewModel : BaseViewModel
     {
-        public WordsAddingBySongPageViewModel()
+        public ICommand GetLyricsCommand { get; private set; }
+        public ICommand ExtractWordsCommand { get; private set; }
+        public ICommand AddSelectedWordsCommand { get; private set; }
+        public ICommand HideAddedWordsCommand { get; private set; }
+        public List<Word> AllWords { get; set; }
+        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        private readonly SongRepository _songRepository = new SongRepository(EnglishBySongsDbContext.GetInstance());
+        private readonly WordsTranslationsParser _wordsTranslationsParser = new WordsTranslationsParser();
+        private readonly SongLyricsParser _songLyricsParser = new SongLyricsParser();
+        private readonly TranslationRepository _translationRepository = new TranslationRepository(EnglishBySongsDbContext.GetInstance());
+        private IPageService _pageService;
+        public SongSearchViewModel()
         {
             _pageService = new PageService();
-
             SelectedWords = new List<object>();
             Words = new List<Word>();
-
             IsConnectedToInternet = CrossConnectivity.Current.IsConnected;
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
-
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
-            {
-                AllWords = db.Words.ToList();
-            }
+            AllWords = _wordRepository.GetAll();
 
             GetLyricsCommand = new Command(async () => await GetLyrics());
             ExtractWordsCommand = new Command(async () => await ExtractWords());
             AddSelectedWordsCommand = new Command(async () => await AddSelectedWords());
             HideAddedWordsCommand = new Command(() => SwapLists());
         }
-
-        private IPageService _pageService;
-
-        public ICommand GetLyricsCommand { get; private set; }
-
-        public ICommand ExtractWordsCommand { get; private set; }
-
-        public ICommand AddSelectedWordsCommand { get; private set; }
-
-        public ICommand HideAddedWordsCommand { get; private set; }
-
-        public List<Word> AllWords { get; set; }
 
         private bool _foundLyricsStackLayoutIsVisible;
 
@@ -62,27 +57,25 @@ namespace EnglishBySongs.ViewModels
 
         private bool _lyricsAreNotFoundStackLayoutIsVisible;
 
-        public bool LyricsAreNotFoundStackLayoutIsVisible
+        public bool LyricsAreNotFound
         {
             get { return _lyricsAreNotFoundStackLayoutIsVisible; }
             set
             {
                 SetValue(ref _lyricsAreNotFoundStackLayoutIsVisible, value);
-                OnPropertyChanged(nameof(LyricsAreNotFoundStackLayoutIsVisible));
+                OnPropertyChanged(nameof(LyricsAreNotFound));
             }
         }
 
-        private bool _manuallyLyricsAddingStackLayoutIsVisible;
-
         private bool _songIsAlreadyAddedStachLayoutIsVisible;
 
-        public bool SongIsAlreadyAddedStachLayoutIsVisible
+        public bool SameSongExists
         {
             get { return _songIsAlreadyAddedStachLayoutIsVisible; }
             set
             {
                 SetValue(ref _songIsAlreadyAddedStachLayoutIsVisible, value);
-                OnPropertyChanged(nameof(SongIsAlreadyAddedStachLayoutIsVisible));
+                OnPropertyChanged(nameof(SameSongExists));
             }
         }
 
@@ -111,15 +104,15 @@ namespace EnglishBySongs.ViewModels
             }
         }
 
-        private string _performer;
+        private string _artist;
 
-        public string Performer
+        public string Artist
         {
-            get { return _performer; }
+            get { return _artist; }
             set
             {
-                SetValue(ref _performer, value);
-                OnPropertyChanged(nameof(Performer));
+                SetValue(ref _artist, value);
+                OnPropertyChanged(nameof(Artist));
             }
         }
 
@@ -171,15 +164,15 @@ namespace EnglishBySongs.ViewModels
             }
         }
 
-        private bool _isBusy;
+        private bool _isLoading;
 
-        public bool IsBusy
+        public bool IsLoading
         {
-            get { return _isBusy; }
+            get { return _isLoading; }
             set
             {
-                SetValue(ref _isBusy, value);
-                OnPropertyChanged(nameof(IsBusy));
+                SetValue(ref _isLoading, value);
+                OnPropertyChanged(nameof(IsLoading));
             }
         }
 
@@ -199,36 +192,32 @@ namespace EnglishBySongs.ViewModels
         {
             // TODO: исправить отслеживание подключения к интернету
             if (!IsConnectedToInternet)
+            {
                 return;
+            }
 
             Lyrics = string.Empty;
             FoundLyricsStackLayoutIsVisible = false;
-            LyricsAreNotFoundStackLayoutIsVisible = false;
-            SongIsAlreadyAddedStachLayoutIsVisible = false;
-
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
+            LyricsAreNotFound = false;
+            SameSongExists = false;
+            if (_songRepository.Get(s => s.Artist == Artist.Trim().ToLower() && s.Name == SongName.Trim().ToLower()) != null)
             {
-                if (db.Songs.Any(s => s.Artist == Performer.Trim().ToLower() && s.Name == SongName.Trim().ToLower()))
-                {
-                    IsBusy = false;
-                    SongIsAlreadyAddedStachLayoutIsVisible = true;
-                    return;
-                }
-            }
-            await _pageService.PushAsync(new LyricsPage(this));
-            IsBusy = true;
-
-            SongLyricsParser parser = new SongLyricsParser(_performer, _songName);
-
-            string lyrics = await parser.ParseAsync();
-            if (lyrics == null)
-            {
-                IsBusy = false;
-                LyricsAreNotFoundStackLayoutIsVisible = true;
+                IsLoading = false;
+                SameSongExists = true;
                 return;
             }
 
-            IsBusy = false;
+            await _pageService.PushAsync(new LyricsPage(this));
+            IsLoading = true;
+            string lyrics = await _songLyricsParser.ParseAsync(_artist, _songName);
+            if (lyrics == null)
+            {
+                IsLoading = false;
+                LyricsAreNotFound = true;
+                return;
+            }
+
+            IsLoading = false;
             Lyrics = lyrics;
 
             FoundLyricsStackLayoutIsVisible = true;
@@ -239,91 +228,81 @@ namespace EnglishBySongs.ViewModels
         {
             Words = new List<Word>();
             WordsExtractor.Extract(Lyrics).ToList().ForEach(s => Words.Add(new Word() { Foreign = s }));
-
             NotAddedWords = new List<Word>(Words);
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
-            {
-                AllWords = db.Words.ToList();
-            }
-
+            AllWords = _wordRepository.GetAll();
             NotAddedWords.RemoveAll(w => AllWords.Any(x => x.Foreign == w.Foreign));
-
             await _pageService.PushAsync(new WordsAddingPage(this));
         }
 
         private async Task AddSelectedWords()
         {
-            IsBusy = true;
-            using (var db = new EnglishBySongsDbContext())
+            IsLoading = true;
+            Song song = new Song()
             {
+                Artist = _artist,
+                Name = _songName,
+                Lyrics = _lyrics
+            };
+            //_songRepository.Add(song);
 
-                Song song = new Song()
-                {
-                    Artist = _performer,
-                    Name = _songName,
-                    Lyrics = _lyrics
-                };
-                db.Songs.Add(song);
+            //bool isLearned;
+            //Word word;
+            //List<Word> words = _listsAreSwaped ? NotAddedWords : Words;
+            //bool autoTranslatingIsSwitchedOn = Preferences.Get("AutoTranslating", true);
+            //foreach (var w in words)
+            //{
+            //    isLearned = !SelectedWords.Any(p => ((Word)p).Foreign == w.Foreign);
+            //    if ((word = _wordRepository.Get(w1 => w1.Foreign == w.Foreign)) == null)
+            //    {
+            //        word = new Word()
+            //        {
+            //            Foreign = w.Foreign,
+            //            IsLearned = isLearned
+            //        };
+            //        _wordRepository.Add(word);
+            //    }
+            //    else
+            //    {
+            //        if (word.IsLearned)
+            //        {
+            //            word.IsLearned = isLearned;
+            //        }
+            //    }
 
-                bool isLearned;
-                Word word;
-
-                List<Word> words = _listsAreSwaped ? NotAddedWords : Words;
-                bool autoTranslatingIsSwitchedOn = Preferences.Get("AutoTranslating", true);
-                foreach (var w in words)
-                {
-                    isLearned = !SelectedWords.Any(p => ((Word)p).Foreign == w.Foreign);
-                    if ((word = await db.Words.Include(w1 => w1.Translations).Include(w1 => w1.Songs).FirstOrDefaultAsync(w1 => w1.Foreign == w.Foreign)) == null)
-                    {
-                        word = new Word()
-                        {
-                            Foreign = w.Foreign,
-                            IsLearned = isLearned
-                        };
-                        db.Words.Add(word);
-                    }
-                    else
-                    {
-                        if (word.IsLearned)
-                            word.IsLearned = isLearned;
-                    }
-
-                    // TODO: выделенные слова, при их присутствии в выученных словах, переносить в невыученыне
-                    if (!isLearned && word.Translations.Count == 0 && autoTranslatingIsSwitchedOn)
-                    {
-                        WordsTranslationsParser wordsTranslationsParser = new WordsTranslationsParser();
-                        List<Translation> translations;
-                        // TODO: убрать промежуточную коллекцию
-                        translations = new List<Translation>();
-                        List<string> tr = await wordsTranslationsParser.TranslateAsync(w.Foreign);
-                        if (tr != null)
-                        {
-                            tr.ForEach(t => translations.Add(new Translation { Text = t }));
-                            foreach (var t in translations)
-                            {
-                                if (await db.Translations.FirstOrDefaultAsync(t1 => t1.Text == t.Text) == null)
-                                {
-                                    db.Translations.Add(t);
-                                }
-                            }
-                        }
-                        if (translations.Count != 0)
-                        {
-                            translations.ForEach(t => word.Translations.Add(t));
-                        }
-                    }
-                    word.Songs.Add(song);
-                }
-                db.SaveChanges();
-            }
-
-            Performer = string.Empty;
+            //    // TODO: выделенные слова, при их присутствии в выученных словах, переносить в невыученыне
+            //    if (!isLearned && word.Translations.Count == 0 && autoTranslatingIsSwitchedOn)
+            //    {
+            //        List<Translation> translations;
+            //        // TODO: убрать промежуточную коллекцию
+            //        translations = new List<Translation>();
+            //        List<string> tr = await _wordsTranslationsParser.TranslateAsync(w.Foreign);
+            //        if (tr != null)
+            //        {
+            //            tr.ForEach(t => translations.Add(new Translation { Text = t }));
+            //            foreach (var t in translations)
+            //            {
+            //                if (_translationRepository.Get(t1 => t1.Text == t.Text) == null)
+            //                {
+            //                    _translationRepository.Add(t);
+            //                }
+            //            }
+            //        }
+            //        if (translations.Count != 0)
+            //        {
+            //            translations.ForEach(t => word.Translations.Add(t));
+            //        }
+            //    }
+            //    word.Songs.Add(song);
+            //}
+            //_wordRepository.Save();
+            await DbHelper.AddSongWithWords(song, _listsAreSwaped ? NotAddedWords : Words, SelectedWords, Preferences.Get("AutoTranslating", true));
+            Artist = string.Empty;
             SongName = string.Empty;
             FoundLyricsStackLayoutIsVisible = false;
 
             MessagingCenter.Send(this, "WordsAdded");
             MessagingCenter.Send(this, "SongAdded");
-            IsBusy = false;
+            IsLoading = false;
 
             _listsAreSwaped = false;
             _addedWordsAreHidden = false;

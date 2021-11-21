@@ -1,4 +1,4 @@
-﻿using EnglishBySongs.Data;
+﻿using Dal;
 using Xamarin.Forms;
 
 namespace EnglishBySongs
@@ -9,11 +9,8 @@ namespace EnglishBySongs
         {
             InitializeComponent();
 
-            using (var db = new EnglishBySongsDbContext())
-            {
-                //db.Database.EnsureDeleted();
-                db.Database.EnsureCreated();
-            }
+            //EnglishBySongsDbContext.GetInstance().Database.EnsureDeleted();
+            EnglishBySongsDbContext.GetInstance().Database.EnsureCreated();
 
             MainPage = new AppShell();
         }

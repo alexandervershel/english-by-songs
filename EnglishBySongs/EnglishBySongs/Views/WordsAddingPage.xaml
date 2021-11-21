@@ -5,7 +5,7 @@
              x:Class="EnglishBySongs.Views.WordsAddingPage">
     
     <ContentPage.BindingContext>
-        <viewmodel:WordsAddingBySongPageViewModel/>
+        <viewmodel:SongSearchViewModel/>
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
@@ -61,10 +61,10 @@
                    CornerRadius="20"
                    BackgroundColor="Black"
                    Opacity="0.5"
-                   IsVisible="{Binding IsBusy}">
+                   IsVisible="{Binding IsLoading}">
                 <StackLayout>
 
-                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
                                            HorizontalOptions="CenterAndExpand"
                                            VerticalOptions="CenterAndExpand"/>
 

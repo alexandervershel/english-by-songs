@@ -1,5 +1,5 @@
-﻿using EnglishBySongs.Models;
-using EnglishBySongs.Services;
+﻿using EnglishBySongs.Services;
+using Entities;
 
 namespace EnglishBySongs.ViewModels
 {

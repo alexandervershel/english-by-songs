@@ -9,11 +9,11 @@ namespace EnglishBySongs.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LyricsPage : ContentPage
     {
-        public LyricsPage(WordsAddingBySongPageViewModel wordsAddingBySongPageViewModel)
+        public LyricsPage(SongSearchViewModel SongSearchPageViewModel)
         {
             InitializeComponent();
 
-            BindingContext = wordsAddingBySongPageViewModel;
+            BindingContext = SongSearchPageViewModel;
         }
     }
 }

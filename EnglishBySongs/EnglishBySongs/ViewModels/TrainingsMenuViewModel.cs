@@ -1,10 +1,7 @@
-﻿using EnglishBySongs.Data;
+﻿using Dal;
+using Dal.Repositories;
 using EnglishBySongs.Services;
 using EnglishBySongs.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -14,6 +11,7 @@ namespace EnglishBySongs.ViewModels
     public class TrainingsMenuViewModel
     {
         private IPageService _pageService;
+        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
         public ICommand StartTrainingCommand { get; private set; }
 
         public TrainingsMenuViewModel()
@@ -26,10 +24,7 @@ namespace EnglishBySongs.ViewModels
         private async Task StartTraining(string x)
         {
             bool trainingCannotBeStarted;
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
-            {
-                trainingCannotBeStarted = db.Words.Where(w => !w.IsLearned).ToList().Count == 0;
-            }
+            trainingCannotBeStarted = _wordRepository.Get(w => !w.IsLearned) == null;
             if (trainingCannotBeStarted)
             {
                 await _pageService.DisplayAlert("Недостаточно слов", "Для начала тренировки перейдите в раздел \"ДОБАВЛЕНИЕ\" и добавьте неизвестные вам слова", "ок");

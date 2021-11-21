@@ -1,10 +1,8 @@
 ﻿using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace EnglishBySongs
+namespace Core.Helpers
 {
     public class WordsTranslationsParser
     {

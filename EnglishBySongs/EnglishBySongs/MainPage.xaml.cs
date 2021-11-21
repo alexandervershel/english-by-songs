@@ -12,9 +12,7 @@ namespace EnglishBySongs
     {
         public MainPage()
         {
-            InitializeComponent();
-
-            
+            InitializeComponent();            
         }
 
         //private void WordsAdditionNavImageButton_Clicked(object sender, EventArgs e)

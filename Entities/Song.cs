@@ -1,11 +1,10 @@
-﻿using EnglishBySongs.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace EnglishBySongs.Models
+namespace Entities
 {
-    public class Song : BaseViewModel
+    public class Song : IModel
     {
 
         public int Id { get; set; }

@@ -21,7 +21,7 @@
              Icon="add.png">
 
             <ShellContent Title="По названию"
-                          ContentTemplate="{DataTemplate views:WordsAddingBySongPage}"/>
+                          ContentTemplate="{DataTemplate views:SongSearchPage}"/>
 
         </Tab>
 

@@ -1,26 +1,25 @@
-﻿using EnglishBySongs.Data;
-using EnglishBySongs.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using Dal.Repositories;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using Dal;
+using Core.Enums;
 
-namespace EnglishBySongs.ViewModels
+namespace EnglishBySongs.ViewModels.ListViewModels
 {
-    public class UnlearnedWordsListViewModel : ListViewModel<WordItem>
+    public class LearnedWordsListViewModel : ListViewModel<WordItem>
     {
-        public UnlearnedWordsListViewModel() : base()
+        public ICommand TransferToUnlearnedWordsCommand { get; private set; }
+        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        public LearnedWordsListViewModel() : base()
         {
-            TransferToLearnedWordsCommand = new Command(async () => await TransferToLearnedWords());
+            TransferToUnlearnedWordsCommand = new Command(async () => await TransferToUnlearnedWords());
 
-            MessagingCenter.Subscribe<WordsAddingBySongPageViewModel>(
+            MessagingCenter.Subscribe<SongSearchViewModel>(
                 this,
                 "WordsAdded",
                 async (sender) =>
@@ -51,24 +50,20 @@ namespace EnglishBySongs.ViewModels
                 {
                     await Sort();
                 });
+
+            MessagingCenter.Subscribe<ListViewModel<SongItem>>(
+                this,
+                "SongsDeleted",
+                async (sender) =>
+                {
+                    await RefreshAsync();
+                });
         }
 
-        public ICommand TransferToLearnedWordsCommand { get; private set; }
-
-        protected override async Task ReadCollectionFromDb()
+        protected override void ReadCollectionFromDb()
         {
             Items.Clear();
-            List<Word> words;
-
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
-            {
-                words = await db.Words.Include(w => w.Songs).Include(w => w.Translations).Where(w => !w.IsLearned).ToListAsync();
-            }
-
-            foreach (var word in words)
-            {
-                Items.Add(new WordItem(word));
-            }
+            _wordRepository.GetAll(w => w.IsLearned).ForEach(w => Items.Add(new WordItem(w)));
         }
 
         protected override async Task Sort()
@@ -108,7 +103,9 @@ namespace EnglishBySongs.ViewModels
         protected override async Task DeleteItems(object obj)
         {
             if (SelectedItems.Count == 0)
+            {
                 return;
+            }
 
             bool isConfirmed = await _pageService.DisplayAlert("Вы действительно хотите удалить выбранные слова?", $"Количество выбранных слов: {SelectedItems.Count}", "да", "нет");
             if (!isConfirmed)
@@ -116,22 +113,19 @@ namespace EnglishBySongs.ViewModels
                 return;
             }
 
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
-            {
-                SelectedItems.ForEach(i => db.Words.Remove(db.Words.Find(i.Id)));
-                db.SaveChanges();
-            }
-
+            SelectedItems.ForEach(i => _wordRepository.Remove(i));
+            _wordRepository.Save();
             MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
-
             await CancelMultiselect();
             await _pageService.DispayToast("Слова удалены");
         }
 
-        private async Task TransferToLearnedWords()
+        private async Task TransferToUnlearnedWords()
         {
             if (SelectedItems.Count == 0)
+            {
                 return;
+            }
 
             bool isConfirmed = await _pageService.DisplayAlert("Вы действительно хотите отметить выбранные слова как выученные? Слова будут перенесены в раздел \"ВЫУЧЕНО\"", $"Количество выбранных слов: {SelectedItems.Count}", "да", "нет");
             if (!isConfirmed)
@@ -139,16 +133,11 @@ namespace EnglishBySongs.ViewModels
                 return;
             }
 
-            using (EnglishBySongsDbContext db = new EnglishBySongsDbContext())
-            {
-                SelectedItems.ForEach(i => db.Words.Find(i.Id).IsLearned = true);
-                db.SaveChanges();
-            }
-
+            SelectedItems.ForEach(i => { i.IsLearned = false; _wordRepository.Update(i); });
+            _wordRepository.Save();
             MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
-
             await CancelMultiselect();
-            await _pageService.DispayToast("Слова перенесены в раздел \"НЕВЫУЧЕНО\"");
+            await _pageService.DispayToast("Слова перенесены в раздел \"ВЫУЧЕНО\"");
         }
     }
 }

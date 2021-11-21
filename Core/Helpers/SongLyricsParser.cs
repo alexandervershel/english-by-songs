@@ -1,29 +1,14 @@
 ﻿using HtmlAgilityPack;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace EnglishBySongs
+namespace Core.Helpers
 {
-    class SongLyricsParser
+    public class SongLyricsParser
     {
-        public SongLyricsParser(string performer, string songName)
-        {
-            _performer = performer;
-            _songName = songName;
-        }
-
-        private string _performer;
-
-        private string _songName;
-
         public string MainUrl { get; } = "https://www.azlyrics.com/lyrics";
-
-        public string Parse()
+        public string Parse(string artist, string songName)
         {
-            string fullUrl = $"{MainUrl}/{_performer.Trim().ToLower().Replace(" ", string.Empty)}/{_songName.Trim().ToLower().Replace(" ", string.Empty)}.html";
+            string fullUrl = $"{MainUrl}/{artist.Trim().ToLower().Replace(" ", string.Empty)}/{songName.Trim().ToLower().Replace(" ", string.Empty)}.html";
             var web = new HtmlWeb();
             var doc = web.Load(fullUrl);
             HtmlNode node = doc.DocumentNode.SelectSingleNode("//div[not(@id) and not(@class)]");
@@ -39,9 +24,9 @@ namespace EnglishBySongs
             return result.Trim();
         }
 
-        public Task<string> ParseAsync()
+        public Task<string> ParseAsync(string artist, string songName)
         {
-            return Task.Run(() => Parse());
+            return Task.Run(() => Parse(artist, songName));
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
-namespace EnglishBySongs.ViewModels
+namespace EnglishBySongs.ViewModels.ListViewModels
 {
     // TODO: rename to 'MultiselectListViewModel'
     public class ListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
@@ -124,14 +124,14 @@ namespace EnglishBySongs.ViewModels
 
         protected async Task RefreshAsync()
         {
-            await ReadCollectionFromDb();
-            await Sort();
+            ReadCollectionFromDb();
+            Sort();
             AllItems = Items;
         }
 
-        protected virtual Task ReadCollectionFromDb()
+        protected virtual void ReadCollectionFromDb()
         {
-            return Task.FromResult(default(List<T>));
+            //return Task.FromResult(default(List<T>));
         }
 
         protected virtual Task Sort()

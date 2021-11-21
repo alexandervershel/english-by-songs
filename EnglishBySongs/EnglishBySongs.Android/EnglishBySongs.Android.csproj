@@ -33,6 +33,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,6 +90,14 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.csproj">
+      <Project>{766AD016-9E38-46C6-9F05-511B8BA1CEDF}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dal\Dal.csproj">
+      <Project>{1B2DEADB-113C-412C-B0C3-5DD5620404C6}</Project>
+      <Name>Dal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EnglishBySongs\EnglishBySongs.csproj">
       <Project>{C560B19F-1649-4A04-BD29-9534FBFC53A6}</Project>
       <Name>EnglishBySongs</Name>

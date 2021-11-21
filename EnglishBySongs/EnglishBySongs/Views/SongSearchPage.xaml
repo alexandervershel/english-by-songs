@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:EnglishBySongs.ViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             x:DataType="viewmodels:WordsAddingBySongPageViewModel"
-             x:Class="EnglishBySongs.Views.WordsAddingBySongPage"
-             x:Name="wordsAddingBySongPage">
+             x:DataType="viewmodels:SongSearchViewModel"
+             x:Class="EnglishBySongs.Views.SongSearchPage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -14,7 +13,7 @@
     </ContentPage.Resources>
 
     <ContentPage.BindingContext>
-        <viewmodels:WordsAddingBySongPageViewModel/>
+        <viewmodels:SongSearchViewModel/>
     </ContentPage.BindingContext>
     
     <ScrollView>
@@ -23,7 +22,7 @@
                 <Entry x:Name="ArtistEntry"
                        Placeholder="Исполнитель"
                        Margin="10, 25, 10, 10"
-                       Text="{Binding Performer}"/>
+                       Text="{Binding Artist}"/>
 
                 <Entry x:Name="SongNameEntry"
                        Placeholder="Название песни"
@@ -49,7 +48,7 @@
             </StackLayout>
             
             <StackLayout x:Name="SongIsAlreadyAddedStachLayout"
-                         IsVisible="{Binding SongIsAlreadyAddedStachLayoutIsVisible, Mode=TwoWay}">
+                         IsVisible="{Binding SameSongExists, Mode=TwoWay}">
                 <Label HorizontalOptions="Center"
                        FontSize="Medium">
                     <Label.FormattedText>

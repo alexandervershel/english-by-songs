@@ -1,4 +1,5 @@
-﻿using EnglishBySongs.Services;
+﻿using Core.Enums;
+using EnglishBySongs.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,28 +8,6 @@ using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
 {
-    public enum WordsSortingModes
-    {
-        AddingDate,
-        AddingDateDescending,
-        Foreign,
-        ForeignDescending,
-        Translations,
-        TranslationsDescending,
-        Songs,
-        SongsDescending
-    }
-
-    public enum SongsSortingModes
-    {
-        AddingDate,
-        AddingDateDescending,
-        Name,
-        NameDescending,
-        Artist,
-        ArtistDescending
-    }
-
     class SettingsViewModel : BaseViewModel
     {
         public SettingsViewModel()

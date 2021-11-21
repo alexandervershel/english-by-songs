@@ -1,11 +1,15 @@
-﻿using EnglishBySongs.Models;
-using EnglishBySongs.Services;
+﻿using EnglishBySongs.Services;
 using EnglishBySongs.Views;
+using Entities;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace EnglishBySongs.ViewModels
 {
-    public class SongItem : Song, IListViewItemViewModel
+    // TODO: избавиться от наследования Song
+    public class SongItem : Song, IListViewItemViewModel, INotifyPropertyChanged
     {
         private IPageService _pageService;
 
@@ -36,6 +40,24 @@ namespace EnglishBySongs.ViewModels
         public async Task ToEditPage()
         {
             await _pageService.PushAsync(new SongPage(new SongViewModel(this)));
+        }
+
+        // TODO: избавиться от этого
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void SetValue<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingField, value))
+                return;
+
+            backingField = value;
+
+            OnPropertyChanged(propertyName);
         }
     }
 }
