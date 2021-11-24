@@ -1,8 +1,9 @@
-﻿using Core.Helpers;
-using Dal;
-using Dal.Repositories;
-using EnglishBySongs.Services;
-using Entities;
+﻿using Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Services;
+using Services.Interfaces;
+using Services.Parsers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,23 +15,27 @@ namespace EnglishBySongs.ViewModels
 {
     public class WordViewModel : BaseViewModel
     {
-        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
-        private readonly TranslationRepository _translationRepository = new TranslationRepository(EnglishBySongsDbContext.GetInstance());
-        private readonly WordsTranslationsParser _translationsParser = new WordsTranslationsParser();
-        private IPageService _pageService;
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        private readonly IRepository<Word> _wordRepository;
+        private readonly IRepository<Translation> _translationRepository;
+        private readonly IPageService _pageService;
+        // TODO: create interface and move to the factory
+        private readonly IWordsTranslationsParser _translationsParser;
         public ICommand SaveChangesCommand { get; private set; }
         public ICommand AddNewTranslationCommand { get; private set; }
         public ICommand RemoveTranslationCommand { get; private set; }
         public ICommand TranslateWordCommand { get; private set; }
-        private Word _primaryWord;
+        private readonly Word _primaryWord;
         public WordViewModel()
         {
+            _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
+            _translationRepository = _serviceProvider.GetService<IRepository<Translation>>();
+            _translationsParser = _serviceProvider.GetService<IWordsTranslationsParser>();
+            _pageService = _serviceProvider.GetService<IPageService>();
             SaveChangesCommand = new Command(async () => await SaveChanges());
             AddNewTranslationCommand = new Command(async () => await AddNewTranslation());
             RemoveTranslationCommand = new Command(async (translation) => await RemoveTranslation(translation));
             TranslateWordCommand = new Command(async () => await TranslateWord());
-
-            _pageService = new PageService();
         }
 
         public WordViewModel(Word word) : this()

@@ -1,20 +1,25 @@
-﻿using Dal.Repositories;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
-using Dal;
-using Core.Enums;
+using Services.Enums;
+using Services.Interfaces;
+using Entities;
+using EnglishBySongs.ViewModels.Dtos;
+using System;
+using Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
     public class LearnedWordsListViewModel : ListViewModel<WordItem>
     {
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         public ICommand TransferToUnlearnedWordsCommand { get; private set; }
-        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        private readonly IRepository<Word> _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
         public LearnedWordsListViewModel() : base()
         {
             TransferToUnlearnedWordsCommand = new Command(async () => await TransferToUnlearnedWords());

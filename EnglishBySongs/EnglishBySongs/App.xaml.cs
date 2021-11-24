@@ -1,4 +1,5 @@
 ﻿using Dal;
+using Services;
 using Xamarin.Forms;
 
 namespace EnglishBySongs
@@ -8,11 +9,10 @@ namespace EnglishBySongs
         public App()
         {
             InitializeComponent();
-
+            MainPage = new AppShell();
+            var serviceProvider = ServiceProviderFactory.ServiceProvider;
             //EnglishBySongsDbContext.GetInstance().Database.EnsureDeleted();
             EnglishBySongsDbContext.GetInstance().Database.EnsureCreated();
-
-            MainPage = new AppShell();
         }
 
         protected override void OnStart()

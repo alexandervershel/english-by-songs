@@ -1,10 +1,12 @@
-﻿using Core.Helpers;
-using Dal;
-using Dal.Repositories;
-using EnglishBySongs.Services;
+﻿using EnglishBySongs.Helpers;
 using EnglishBySongs.Views;
 using Entities;
+using Microsoft.Extensions.DependencyInjection;
 using Plugin.Connectivity;
+using Services;
+using Services.Interfaces;
+using Services.Parsers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,20 +19,22 @@ namespace EnglishBySongs.ViewModels
     // TODO: name as SongSearchViewModel
     public class SongSearchViewModel : BaseViewModel
     {
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         public ICommand GetLyricsCommand { get; private set; }
         public ICommand ExtractWordsCommand { get; private set; }
         public ICommand AddSelectedWordsCommand { get; private set; }
         public ICommand HideAddedWordsCommand { get; private set; }
         public List<Word> AllWords { get; set; }
-        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
-        private readonly SongRepository _songRepository = new SongRepository(EnglishBySongsDbContext.GetInstance());
-        private readonly WordsTranslationsParser _wordsTranslationsParser = new WordsTranslationsParser();
-        private readonly SongLyricsParser _songLyricsParser = new SongLyricsParser();
-        private readonly TranslationRepository _translationRepository = new TranslationRepository(EnglishBySongsDbContext.GetInstance());
-        private IPageService _pageService;
+        private readonly IRepository<Word> _wordRepository;
+        private readonly IRepository<Song> _songRepository;
+        private readonly ISongLyricsParser _songLyricsParser;
+        private readonly IPageService _pageService;
         public SongSearchViewModel()
         {
-            _pageService = new PageService();
+            _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
+            _songRepository = _serviceProvider.GetService<IRepository<Song>>();
+            _songLyricsParser = _serviceProvider.GetService<ISongLyricsParser>();
+            _pageService = _serviceProvider.GetService<IPageService>();
             SelectedWords = new List<object>();
             Words = new List<Word>();
             IsConnectedToInternet = CrossConnectivity.Current.IsConnected;
@@ -243,58 +247,6 @@ namespace EnglishBySongs.ViewModels
                 Name = _songName,
                 Lyrics = _lyrics
             };
-            //_songRepository.Add(song);
-
-            //bool isLearned;
-            //Word word;
-            //List<Word> words = _listsAreSwaped ? NotAddedWords : Words;
-            //bool autoTranslatingIsSwitchedOn = Preferences.Get("AutoTranslating", true);
-            //foreach (var w in words)
-            //{
-            //    isLearned = !SelectedWords.Any(p => ((Word)p).Foreign == w.Foreign);
-            //    if ((word = _wordRepository.Get(w1 => w1.Foreign == w.Foreign)) == null)
-            //    {
-            //        word = new Word()
-            //        {
-            //            Foreign = w.Foreign,
-            //            IsLearned = isLearned
-            //        };
-            //        _wordRepository.Add(word);
-            //    }
-            //    else
-            //    {
-            //        if (word.IsLearned)
-            //        {
-            //            word.IsLearned = isLearned;
-            //        }
-            //    }
-
-            //    // TODO: выделенные слова, при их присутствии в выученных словах, переносить в невыученыне
-            //    if (!isLearned && word.Translations.Count == 0 && autoTranslatingIsSwitchedOn)
-            //    {
-            //        List<Translation> translations;
-            //        // TODO: убрать промежуточную коллекцию
-            //        translations = new List<Translation>();
-            //        List<string> tr = await _wordsTranslationsParser.TranslateAsync(w.Foreign);
-            //        if (tr != null)
-            //        {
-            //            tr.ForEach(t => translations.Add(new Translation { Text = t }));
-            //            foreach (var t in translations)
-            //            {
-            //                if (_translationRepository.Get(t1 => t1.Text == t.Text) == null)
-            //                {
-            //                    _translationRepository.Add(t);
-            //                }
-            //            }
-            //        }
-            //        if (translations.Count != 0)
-            //        {
-            //            translations.ForEach(t => word.Translations.Add(t));
-            //        }
-            //    }
-            //    word.Songs.Add(song);
-            //}
-            //_wordRepository.Save();
             await DbHelper.AddSongWithWords(song, _listsAreSwaped ? NotAddedWords : Words, SelectedWords, Preferences.Get("AutoTranslating", true));
             Artist = string.Empty;
             SongName = string.Empty;

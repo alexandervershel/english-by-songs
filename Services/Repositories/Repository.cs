@@ -1,22 +1,19 @@
-﻿using Entities;
+﻿using Dal;
+using Entities;
 using Microsoft.EntityFrameworkCore;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Dal.Repositories
+namespace Services.Repositories
 {
-    public class Repository<T> where T : class, IModel, new()
+    public class Repository<T> : IRepository<T> where T : class, IModel, new()
     {
         private bool _disposed = false;
-        protected readonly EnglishBySongsDbContext _db;
-        public Repository(EnglishBySongsDbContext db)
-        {
-            _db = db;
-        }
-
+        protected readonly EnglishBySongsDbContext _db = EnglishBySongsDbContext.GetInstance();
         public virtual T Get(int id)
         {
             return _db.Set<T>().Find(id);

@@ -1,6 +1,7 @@
-﻿using Core.Enums;
-using Dal;
-using Dal.Repositories;
+﻿using Services.Enums;
+using EnglishBySongs.ViewModels.Dtos;
+using Entities;
+using Services.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,13 +10,17 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using System;
+using Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
     public class UnlearnedWordsListViewModel : ListViewModel<WordItem>
     {
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         public ICommand TransferToLearnedWordsCommand { get; private set; }
-        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        private readonly IRepository<Word> _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
         public UnlearnedWordsListViewModel() : base()
         {
             TransferToLearnedWordsCommand = new Command(async () => await TransferToLearnedWords());
@@ -59,12 +64,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                 {
                     await RefreshAsync();
                 });
-        }
-
-        protected override void ReadCollectionFromDb()
-        {
-            Items.Clear();
-            _wordRepository.GetAll(w => !w.IsLearned).ForEach(w => Items.Add(new WordItem(w)));
         }
 
         protected override async Task Sort()
@@ -119,6 +118,12 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
             await CancelMultiselect();
             await _pageService.DispayToast("Слова удалены");
+        }
+
+        protected override void ReadCollectionFromDb()
+        {
+            Items.Clear();
+            _wordRepository.GetAll(w => !w.IsLearned).ForEach(w => Items.Add(new WordItem(w)));
         }
 
         private async Task TransferToLearnedWords()

@@ -1,8 +1,9 @@
-﻿using Core.Enums;
-using EnglishBySongs.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Services;
+using Services.Enums;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -10,10 +11,14 @@ namespace EnglishBySongs.ViewModels
 {
     class SettingsViewModel : BaseViewModel
     {
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        protected IPageService _pageService;
+
+        private bool _autoTranslatingIsSwitchedOn;
+
         public SettingsViewModel()
         {
-            _pageService = new PageService();
-
+            _pageService = _serviceProvider.GetService<IPageService>();
             _autoTranslatingIsSwitchedOn = Preferences.Get("AutoTranslating", true);
 
             _wordsSortingMode = (WordsSortingModes)Preferences.Get("WordsSortingMode", 2);
@@ -40,10 +45,6 @@ namespace EnglishBySongs.ViewModels
                 "По исполнителю (обр.)"
             };
         }
-
-        protected IPageService _pageService;
-
-        private bool _autoTranslatingIsSwitchedOn;
 
         public bool AutoTranslatingIsSwitchedOn
         {

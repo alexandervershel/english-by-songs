@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using Dal;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,13 +7,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Dal.Repositories
+namespace Services.Repositories
 {
     public class WordRepository : Repository<Word>
     {
-        public WordRepository(EnglishBySongsDbContext db) : base(db)
+        public WordRepository() : base()
         {
-
         }
 
         public override Word Get(int id)

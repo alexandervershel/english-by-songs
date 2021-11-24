@@ -1,9 +1,9 @@
 ﻿using HtmlAgilityPack;
 using System.Threading.Tasks;
 
-namespace Core.Helpers
+namespace Services.Parsers
 {
-    public class SongLyricsParser
+    public class SongLyricsParser : ISongLyricsParser
     {
         public string MainUrl { get; } = "https://www.azlyrics.com/lyrics";
         public string Parse(string artist, string songName)

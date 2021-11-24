@@ -1,7 +1,7 @@
-﻿using Core.Enums;
+﻿using Services.Enums;
 using System;
 
-namespace Core.Helpers
+namespace EnglishBySongs.Helpers
 {
     public static class EnumConverterHelper
     {

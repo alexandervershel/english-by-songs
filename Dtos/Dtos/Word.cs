@@ -1,38 +1,40 @@
-﻿using EnglishBySongs.Services;
-using EnglishBySongs.Views;
+﻿using Dtos.Interfaces;
+using EnglishBySongs.ViewModels;
 using Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace EnglishBySongs.ViewModels
+namespace Dtos.Dtos
 {
-    public class WordItem : Word, IListViewItemViewModel, INotifyPropertyChanged
+    public class Word : IListViewItemViewModel, INotifyPropertyChanged, IModel
     {
+        public int Id { get; set; }
+        public string Foreign { get; set; }
+        public bool IsLearned { get; set; }
+        public virtual ICollection<Translation> Translations { get; set; } = new List<Translation>();
+        public virtual ICollection<Song> Songs { get; set; } = new List<Song>();
+        public string Line
+        {
+            get
+            {
+                List<Song> songs = Songs.ToList();
+                return songs[0].Lyrics.Split("\n").FirstOrDefault(s => s.Contains(Foreign, StringComparison.OrdinalIgnoreCase));
+            }
+        }
         private IPageService _pageService;
-
-        //public WordItem()
-        //{
-        //    _pageService = new PageService();
-        //    stringByWhichToFind = Foreign;
-        //}
-        public WordItem()
+        // TODO: get rid of default constructor
+        public Word()
         {
 
         }
 
-        public WordItem(Word word)// : this()
+        public Word(IPageService pageService)// : this()
         {
-            _pageService = new PageService();
-
-            Id = word.Id;
-            Foreign = word.Foreign;
-            IsLearned = word.IsLearned;
-            Translations = word.Translations;
-            Songs = word.Songs;
-
-            StringByWhichToFind = word.Foreign;
+            _pageService = pageService;
         }
 
         // TODO: перенести в базовый класс
@@ -52,7 +54,9 @@ namespace EnglishBySongs.ViewModels
 
         public async Task ToEditPage()
         {
-            await _pageService.PushAsync(new WordPage(new WordViewModel(this)));
+            //await _pageService.PushAsync(new WordPage(new WordViewModel(this)));
+            
+            await _pageService.PushEditPageAsync<Word>();
         }
 
         // TODO: удалить

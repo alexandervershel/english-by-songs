@@ -1,20 +1,22 @@
-﻿using Dal;
-using Dal.Repositories;
-using Entities;
+﻿using Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Services;
+using Services.Interfaces;
+using Services.Parsers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.Helpers
+namespace EnglishBySongs.Helpers
 {
     public static class DbHelper
     {
-        private static readonly WordsTranslationsParser _wordsTranslationsParser = new WordsTranslationsParser();
-        private static readonly SongLyricsParser _songLyricsParser = new SongLyricsParser();
-        private static readonly TranslationRepository _translationRepository = new TranslationRepository(EnglishBySongsDbContext.GetInstance());
-        private static readonly SongRepository _songRepository = new SongRepository(EnglishBySongsDbContext.GetInstance());
-        private static readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
-
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        private static readonly IWordsTranslationsParser _wordsTranslationsParser = _serviceProvider.GetService<IWordsTranslationsParser>();
+        private static readonly IRepository<Translation> _translationRepository = _serviceProvider.GetService<IRepository<Translation>>();
+        private static readonly IRepository<Song> _songRepository = _serviceProvider.GetService<IRepository<Song>>();
+        private static readonly IRepository<Word> _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
         public static async Task AddSongWithWords(Song song, List<Word> words, List<object> selectedWords, bool autoTranslating)
         {
             _songRepository.Add(song);

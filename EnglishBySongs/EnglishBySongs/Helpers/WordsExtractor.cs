@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Core.Helpers
+namespace EnglishBySongs.Helpers
 {
     public static class WordsExtractor
     {

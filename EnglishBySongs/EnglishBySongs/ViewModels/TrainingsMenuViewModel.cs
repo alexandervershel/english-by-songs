@@ -1,22 +1,26 @@
-﻿using Dal;
-using Dal.Repositories;
-using EnglishBySongs.Services;
-using EnglishBySongs.Views;
+﻿using EnglishBySongs.Views;
+using Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Services;
+using Services.Interfaces;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
 {
-    public class TrainingsMenuViewModel
+    public class TrainingsMenuViewModel : BaseViewModel
     {
-        private IPageService _pageService;
-        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        private readonly IPageService _pageService;
+        private readonly IRepository<Word> _wordRepository;
         public ICommand StartTrainingCommand { get; private set; }
 
         public TrainingsMenuViewModel()
         {
-            _pageService = new PageService();
+            _pageService = _serviceProvider.GetService<IPageService>();
+            _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
             StartTrainingCommand = new Command<string>(async (x) => await StartTraining(x));
 
         }

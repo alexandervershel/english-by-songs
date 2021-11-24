@@ -2,14 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.34" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+    <Folder Include="Implementations\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Dal\Dal.csproj" />
     <ProjectReference Include="..\Entities\Entities.csproj" />
   </ItemGroup>

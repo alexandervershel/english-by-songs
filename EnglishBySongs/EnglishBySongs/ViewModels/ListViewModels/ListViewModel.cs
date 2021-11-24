@@ -1,5 +1,7 @@
-﻿using EnglishBySongs.Services;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Services;
+using Services.Interfaces;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +12,18 @@ using Xamarin.Forms.Internals;
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
     // TODO: rename to 'MultiselectListViewModel'
-    public class ListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
+    public abstract class ListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
     {
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        protected readonly IPageService _pageService;
+        public virtual ICommand ItemTappedCommand { get; private set; }
+        public virtual ICommand DisplayCheckBoxesCommand { get; private set; }
+        public virtual ICommand CancelMultiselectCommand { get; private set; }
+        public virtual ICommand DeleteWordsCommand { get; private set; }
+        public virtual ICommand SelectAllCommand { get; private set; }
         public ListViewModel()
         {
-            _pageService = new PageService();
+            _pageService = _serviceProvider.GetService<IPageService>();
             _isMultiselect = false;
             Items = new ObservableCollection<T>();
             ReadCollectionFromDb();
@@ -28,20 +37,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             SelectAllCommand = new Command(async () => await SelectAll());
         }
 
-        protected IPageService _pageService;
-
-        public virtual ICommand ItemTappedCommand { get; private set; }
-
-        public virtual ICommand DisplayCheckBoxesCommand { get; private set; }
-
-        public virtual ICommand CancelMultiselectCommand { get; private set; }
-
-        public virtual ICommand DeleteWordsCommand { get; private set; }
-
-        public virtual ICommand SelectAllCommand { get; private set; }
-
         private ObservableCollection<T> _items;
-
         public ObservableCollection<T> Items
         {
             get { return _items; }
@@ -53,7 +49,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
         }
 
         private ObservableCollection<T> _allItems;
-
         public ObservableCollection<T> AllItems
         {
             get { return _allItems; }

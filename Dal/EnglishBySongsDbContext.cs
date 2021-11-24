@@ -12,11 +12,8 @@ namespace Dal
         public DbSet<Translation> Translations { get; set; }
         public string Name { get; private set; }
         private string _databasePath;
-
         private static EnglishBySongsDbContext _instance;
-
-        // TODO: make protected
-        public EnglishBySongsDbContext()
+        private EnglishBySongsDbContext()
         {
             _databasePath = DependencyService.Get<IDatabasePath>().GetPath(DBFILENAME);
         }

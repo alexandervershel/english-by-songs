@@ -1,13 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using EnglishBySongs.ViewModels;
+using Entities;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace EnglishBySongs.ViewModels
+namespace Dtos.Dtos
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class Translation : INotifyPropertyChanged, IModel
     {
-        //protected readonly IAbstractFactory _abstractFactory = new DefaultAbstractFactory();
+        public int Id { get; set; }
+        public string Text { get; set; }
+        public virtual ICollection<WordModel> Words { get; set; } = new List<WordModel>();
+        public Translation()
+        {
+
+        }
+        public override string ToString()
+        {
+            return Text;
+        }
+
+        // TODO: remove
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -1,27 +1,27 @@
-﻿using Dal;
-using Dal.Repositories;
-using EnglishBySongs.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Entities;
+using Services.Interfaces;
+using Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnglishBySongs.ViewModels
 {
     class TrainingViewModel : BaseViewModel
     {
-        private IPageService _pageService;
-        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        private readonly IPageService _pageService;
+        private readonly IRepository<Word> _wordRepository;
         public ICommand PopPageCommand { get; private set; }
-
         public ICommand EndTrainingCommand { get; private set; }
-
         public TrainingViewModel()
         {
-            _pageService = new PageService();
+            _pageService = _serviceProvider.GetService<IPageService>();
+            _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
 
             PopPageCommand = new Command(async () => await PopPage());
             EndTrainingCommand = new Command(async () => await EndTraining());
@@ -72,8 +72,5 @@ namespace EnglishBySongs.ViewModels
                 Words.FirstOrDefault(w => w.Foreign == _currentWord.Foreign).IsLearned = _currentWord.IsLearned;
             }
         }
-
-
-
     }
 }

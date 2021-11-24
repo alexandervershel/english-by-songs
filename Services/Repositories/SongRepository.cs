@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using Dal;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,23 +7,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Dal.Repositories
+namespace Services.Repositories
 {
     public class SongRepository : Repository<Song>
     {
-        public SongRepository(EnglishBySongsDbContext db) : base(db)
+        public SongRepository() : base()
         {
         }
-
-        //public override Song Get(int id)
-        //{
-        //    return _db.Songs.Find(id);
-        //}
-
-        //public override Song Get(Expression<Func<Song, bool>> predicate)
-        //{
-        //    return _db.Songs.FirstOrDefault(predicate);
-        //}
 
         public override List<Song> GetAll()
         {
@@ -43,16 +34,6 @@ namespace Dal.Repositories
         {
             return await _db.Songs.Include(w => w.Words).Where(predicate).ToListAsync();
         }
-
-        //public override async Task<Song> GetAsync(int id)
-        //{
-        //    return await _db.Songs.FindAsync(id);
-        //}
-
-        //public override async Task<Song> GetAsync(Expression<Func<Song, bool>> predicate)
-        //{
-        //    return await _db.Songs.FirstOrDefaultAsync(predicate);
-        //}
 
         public override void Remove(Song item)
         {

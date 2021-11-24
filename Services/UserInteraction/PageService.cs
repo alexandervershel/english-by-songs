@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.CommunityToolkit.Extensions;
+using Services.Interfaces;
 
-namespace EnglishBySongs.Services
+namespace Services.UserInteraction
 {
     public class PageService : IPageService
     {
-        private Page _page = Application.Current.MainPage;
+        private readonly Page _page = Application.Current.MainPage;
 
         public async Task DisplayAlert(string title, string message, string ok)
         {

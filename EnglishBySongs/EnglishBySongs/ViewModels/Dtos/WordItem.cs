@@ -1,31 +1,46 @@
-﻿using EnglishBySongs.Services;
-using EnglishBySongs.Views;
+﻿using EnglishBySongs.Views;
 using Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Services;
+using Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace EnglishBySongs.ViewModels
+namespace EnglishBySongs.ViewModels.Dtos
 {
-    // TODO: избавиться от наследования Song
-    public class SongItem : Song, IListViewItemViewModel, INotifyPropertyChanged
+    public class WordItem : Word, IListViewItemViewModel, INotifyPropertyChanged
     {
-        private IPageService _pageService;
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        private readonly IPageService _pageService;
 
-        public SongItem(Song song)
+        //public WordItem()
+        //{
+        //    _pageService = new PageService();
+        //    stringByWhichToFind = Foreign;
+        //}
+        public WordItem()
         {
-            _pageService = new PageService();
-
-            Id = song.Id;
-            Name = song.Name;
-            Artist = song.Artist;
-            Lyrics = song.Lyrics;
-            Words = song.Words;
-            StringByWhichToFind = Name;
         }
 
+        public WordItem(Word word)// : this()
+        {
+            _pageService = _serviceProvider.GetService<IPageService>();
+
+            Id = word.Id;
+            Foreign = word.Foreign;
+            IsLearned = word.IsLearned;
+            Translations = word.Translations;
+            Songs = word.Songs;
+
+            StringByWhichToFind = word.Foreign;
+        }
+
+        // TODO: перенести в базовый класс
         private bool _isSelected;
+
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -35,14 +50,15 @@ namespace EnglishBySongs.ViewModels
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
+
         public string StringByWhichToFind { get; set; }
 
         public async Task ToEditPage()
         {
-            await _pageService.PushAsync(new SongPage(new SongViewModel(this)));
+            await _pageService.PushAsync(new WordPage(new WordViewModel(this)));
         }
 
-        // TODO: избавиться от этого
+        // TODO: удалить
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

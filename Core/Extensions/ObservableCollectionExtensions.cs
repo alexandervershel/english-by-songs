@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Core.Extensions
+namespace Services.Extensions
 {
     public static class ObservableCollectionExtensions
     {

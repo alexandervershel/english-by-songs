@@ -3,20 +3,24 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
-using Dal.Repositories;
-using Dal;
 using System;
-using System.Collections.Generic;
-using Core;
-using Core.Extensions;
-using Core.Enums;
+using Services.Extensions;
+using Services.Enums;
+using Services.Interfaces;
+using Entities;
+using EnglishBySongs.ViewModels.Dtos;
+using Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
     public class SongsListViewModel : ListViewModel<SongItem>
     {
-        private readonly SongRepository _songRepository = new SongRepository(EnglishBySongsDbContext.GetInstance());
-        private readonly WordRepository _wordRepository = new WordRepository(EnglishBySongsDbContext.GetInstance());
+        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        // make readonly
+        private readonly IRepository<Song> _songRepository = _serviceProvider.GetService<IRepository<Song>>();
+        private readonly IRepository<Word> _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
+        // may problem is in base constructor
         public SongsListViewModel() : base()
         {
             MessagingCenter.Subscribe<SongSearchViewModel>(

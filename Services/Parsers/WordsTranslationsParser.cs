@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Core.Helpers
+namespace Services.Parsers
 {
-    public class WordsTranslationsParser
+    public class WordsTranslationsParser : IWordsTranslationsParser
     {
         public List<string> Translate(string word)
         {

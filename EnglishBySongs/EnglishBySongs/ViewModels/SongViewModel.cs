@@ -1,15 +1,11 @@
-﻿using EnglishBySongs.Services;
-using Entities;
+﻿using Entities;
 
 namespace EnglishBySongs.ViewModels
 {
     public class SongViewModel : BaseViewModel
     {
-        IPageService _pageService;
-
         public SongViewModel()
         {
-            _pageService = new PageService();
         }
 
         public SongViewModel(Song song) : this()
