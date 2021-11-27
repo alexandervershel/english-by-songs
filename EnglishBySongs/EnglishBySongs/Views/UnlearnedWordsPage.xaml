@@ -44,6 +44,7 @@
                                            FontAttributes="Bold"/>
 
                                     <CheckBox HorizontalOptions="EndAndExpand"
+                                              Color="#7464ec"
                                               IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:UnlearnedWordsListViewModel}}, Path=IsMultiselect}"
                                               IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
 
@@ -102,13 +103,13 @@
             <StackLayout Orientation="Horizontal"
                          VerticalOptions="End"
                          HorizontalOptions="FillAndExpand"
-                         BackgroundColor="Gray"
+                         BackgroundColor="#8c7cdc"
                          IsVisible="{Binding IsMultiselect}"
-                         Padding="0, 10, 0, 10">
+                         Padding="0, 15">
 
                 <Label Text="удалить"
                        TextDecorations="Underline"
-                       TextColor="OrangeRed"
+                       TextColor="#ffffff"
                        FontSize="17"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center"
@@ -122,7 +123,7 @@
 
                 <Label Text="выучено"
                        TextDecorations="Underline"
-                       TextColor="OrangeRed"
+                       TextColor="#ffffff"
                        FontSize="17"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center">
@@ -135,7 +136,7 @@
 
                 <Label Text="выделить все"
                        TextDecorations="Underline"
-                       TextColor="OrangeRed"
+                       TextColor="#ffffff"
                        FontSize="17"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center">
@@ -148,7 +149,7 @@
 
                 <Label Text="отмена"
                        TextDecorations="Underline"
-                       TextColor="OrangeRed"
+                       TextColor="#ffffff"
                        FontSize="17"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center">

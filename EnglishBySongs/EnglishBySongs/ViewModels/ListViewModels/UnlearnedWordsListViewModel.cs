@@ -1,5 +1,4 @@
 ﻿using Services.Enums;
-using EnglishBySongs.ViewModels.Dtos;
 using Entities;
 using Services.Interfaces;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using Xamarin.Forms.Internals;
 using System;
 using Services;
 using Microsoft.Extensions.DependencyInjection;
+using EnglishBySongs.ViewModels.Items;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {

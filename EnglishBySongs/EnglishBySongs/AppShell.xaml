@@ -2,9 +2,10 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:EnglishBySongs.Views"
-       x:Class="EnglishBySongs.AppShell">
+       x:Class="EnglishBySongs.AppShell"
+       BackgroundColor="#7464ec">
 
-    <FlyoutItem Title="Главная">
+    <FlyoutItem Title="Главная" Shell.TabBarTitleColor="#e1e0ea">
 
         <Tab Title="СЛОВАРЬ"
              Icon="dictionary.png">
@@ -33,7 +34,6 @@
         <ShellContent Title="ТРЕНИРОВКА"
                       Icon="studying.png"
                       ContentTemplate="{DataTemplate views:StartTrainingPage}"/>
-
 
     </FlyoutItem>
 

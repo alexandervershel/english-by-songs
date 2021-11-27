@@ -10,28 +10,35 @@
 
     <ContentPage.Content>
         <Grid>
+            <StackLayout>
+                <StackLayout BackgroundColor="#8c7cdc">
+                   <StackLayout Orientation="Horizontal">
+                       <Switch IsToggled="{Binding AddedWordsAreHidden, Mode=TwoWay}"/>
+                       <Label Text="Скрыть уже добавленные слова"
+                              TextColor="#ffffff"
+                              FontSize="22"/>
+                   </StackLayout>
 
-            <StackLayout >
-                <StackLayout Orientation="Horizontal">
-                    <Switch IsToggled="{Binding AddedWordsAreHidden, Mode=TwoWay}"/>
-                    <Label Text="Скрыть уже добавленные слова"
-                           FontSize="22"/>
+                   <Label HorizontalTextAlignment="Center">
+                       <Label.FormattedText>
+                           <FormattedString>
+                               <Span Text="Выделено слов: "
+                                     FontSize="22"
+                                     TextColor="#ffffff"/>
+                               <Span Text="{Binding Words.Count}"
+                                     FontSize="22"
+                                     TextColor="#ffffff"/>
+                           </FormattedString>
+                       </Label.FormattedText>
+                   </Label>
+
+                   <Label Text="Выберите неизвестные вам слова"
+                          FontAttributes="Bold"
+                          Padding="5"
+                          FontSize="22"
+                          TextColor="#ffffff"
+                          HorizontalTextAlignment="Center"/>
                 </StackLayout>
-
-                <Label>
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Выделено слов: "
-                                  FontSize="22"/>
-                            <Span Text="{Binding Words.Count}"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-
-                <Label Text="Выберите неизвестные вам слова"
-                       FontAttributes="Bold"
-                       FontSize="22"
-                       HorizontalTextAlignment="Center"/>
 
                 <CollectionView ItemsSource="{Binding Words}"
                             x:Name="ExtractedWordsCollectionView"
@@ -41,7 +48,8 @@
                         <DataTemplate>
                             <StackLayout>
                                 <Label Text="{Binding Foreign}"
-                                   FontSize="Title"/>
+                                   FontSize="24"
+                                       Padding="10, 8"/>
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -70,7 +78,7 @@
 
                     <Label Text="Слова переводятся"
                                FontSize="17"
-                               TextColor="OrangeRed"
+                               TextColor="#8c7cdc"
                                FontAttributes="Bold"
                                HorizontalTextAlignment="Center"
                                HorizontalOptions="CenterAndExpand"/>

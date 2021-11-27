@@ -1,5 +1,4 @@
-﻿using Dal;
-using Entities;
+﻿using Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Interfaces;
 using Services.Parsers;

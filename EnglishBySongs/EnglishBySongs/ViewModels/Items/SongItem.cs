@@ -9,38 +9,27 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace EnglishBySongs.ViewModels.Dtos
+namespace EnglishBySongs.ViewModels.Items
 {
-    public class WordItem : Word, IListViewItemViewModel, INotifyPropertyChanged
+    // TODO: избавиться от наследования Song
+    public class SongItem : Song, IListViewItemViewModel, INotifyPropertyChanged
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private readonly IPageService _pageService;
-
-        //public WordItem()
-        //{
-        //    _pageService = new PageService();
-        //    stringByWhichToFind = Foreign;
-        //}
-        public WordItem()
+        public SongItem(Song song)
         {
-        }
-
-        public WordItem(Word word)// : this()
-        {
+            // TODO: get rid of dependency
             _pageService = _serviceProvider.GetService<IPageService>();
 
-            Id = word.Id;
-            Foreign = word.Foreign;
-            IsLearned = word.IsLearned;
-            Translations = word.Translations;
-            Songs = word.Songs;
-
-            StringByWhichToFind = word.Foreign;
+            Id = song.Id;
+            Name = song.Name;
+            Artist = song.Artist;
+            Lyrics = song.Lyrics;
+            Words = song.Words;
+            StringByWhichToFind = Name;
         }
 
-        // TODO: перенести в базовый класс
         private bool _isSelected;
-
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -50,15 +39,14 @@ namespace EnglishBySongs.ViewModels.Dtos
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
-
         public string StringByWhichToFind { get; set; }
 
         public async Task ToEditPage()
         {
-            await _pageService.PushAsync(new WordPage(new WordViewModel(this)));
+            await _pageService.PushAsync(new SongPage(new SongViewModel(this)));
         }
 
-        // TODO: удалить
+        // TODO: избавиться от этого
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -8,10 +8,10 @@ using Xamarin.Forms.Internals;
 using Services.Enums;
 using Services.Interfaces;
 using Entities;
-using EnglishBySongs.ViewModels.Dtos;
 using System;
 using Services;
 using Microsoft.Extensions.DependencyInjection;
+using EnglishBySongs.ViewModels.Items;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
