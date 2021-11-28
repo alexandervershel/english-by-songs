@@ -1,6 +1,6 @@
 ﻿using Entities;
 
-namespace EnglishBySongs.ViewModels
+namespace EnglishBySongs.ViewModels.EditViewModels
 {
     public class SongViewModel : BaseViewModel
     {

@@ -16,7 +16,6 @@ using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
 {
-    // TODO: name as SongSearchViewModel
     public class SongSearchViewModel : BaseViewModel
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;

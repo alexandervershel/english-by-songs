@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EnglishBySongs.Helpers
 {
-    public static class DbHelper
+    internal static class DbHelper
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private static readonly IWordsTranslationsParser _wordsTranslationsParser = _serviceProvider.GetService<IWordsTranslationsParser>();

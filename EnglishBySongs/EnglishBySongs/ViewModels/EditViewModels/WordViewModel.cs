@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace EnglishBySongs.ViewModels
+namespace EnglishBySongs.ViewModels.EditViewModels
 {
     public class WordViewModel : BaseViewModel
     {
@@ -19,7 +19,6 @@ namespace EnglishBySongs.ViewModels
         private readonly IRepository<Word> _wordRepository;
         private readonly IRepository<Translation> _translationRepository;
         private readonly IPageService _pageService;
-        // TODO: create interface and move to the factory
         private readonly IWordsTranslationsParser _translationsParser;
         public ICommand SaveChangesCommand { get; private set; }
         public ICommand AddNewTranslationCommand { get; private set; }

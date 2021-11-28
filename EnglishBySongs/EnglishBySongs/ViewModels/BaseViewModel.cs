@@ -6,7 +6,6 @@ namespace EnglishBySongs.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        //protected readonly IAbstractFactory _abstractFactory = new DefaultAbstractFactory();
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace EnglishBySongs.Helpers
 {
-    public static class CompareHelper
+    internal static class CompareHelper
     {
         public static int CompareByStringValue<T>(IEnumerable<T> list1, IEnumerable<T> list2)
         {

@@ -74,11 +74,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\Behaviors\" />
-    <Folder Include="Controls\Converters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.csproj" />
     <ProjectReference Include="..\..\Dal\Dal.csproj" />
     <ProjectReference Include="..\..\Entities\Entities.csproj" />
