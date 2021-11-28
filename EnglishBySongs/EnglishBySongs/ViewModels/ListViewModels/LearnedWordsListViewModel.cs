@@ -9,10 +9,10 @@ using Entities;
 using System;
 using Services;
 using Microsoft.Extensions.DependencyInjection;
-using EnglishBySongs.ViewModels.Items;
 using EnglishBySongs.Helpers;
 using EnglishBySongs.ViewModels.EditViewModels;
 using EnglishBySongs.Views;
+using Dtos;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {

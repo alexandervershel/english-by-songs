@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{8189BAAC-1520-4DF4-A2E1-4C51755DDE4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{4EFA7498-A5AB-4226-91AA-EF926189E0DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{4EFA7498-A5AB-4226-91AA-EF926189E0DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dtos", "Dtos\Dtos.csproj", "{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,18 @@ Global
 		{4EFA7498-A5AB-4226-91AA-EF926189E0DD}.Release|iPhone.Build.0 = Release|Any CPU
 		{4EFA7498-A5AB-4226-91AA-EF926189E0DD}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{4EFA7498-A5AB-4226-91AA-EF926189E0DD}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Release|iPhone.Build.0 = Release|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{C60C1FC5-5BC5-4841-BAA0-46794253D3EF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

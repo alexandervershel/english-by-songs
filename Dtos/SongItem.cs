@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace EnglishBySongs.ViewModels.Items
+namespace Dtos
 {
     // TODO: избавиться от наследования Song
     public class SongItem : Song, IListViewItemViewModel, INotifyPropertyChanged
