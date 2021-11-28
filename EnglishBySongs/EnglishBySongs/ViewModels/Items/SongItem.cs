@@ -1,8 +1,4 @@
 ﻿using Entities;
-using Microsoft.Extensions.DependencyInjection;
-using Services;
-using Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,13 +8,8 @@ namespace EnglishBySongs.ViewModels.Items
     // TODO: избавиться от наследования Song
     public class SongItem : Song, IListViewItemViewModel, INotifyPropertyChanged
     {
-        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
-        private readonly IPageService _pageService;
         public SongItem(Song song)
         {
-            // TODO: get rid of dependency
-            _pageService = _serviceProvider.GetService<IPageService>();
-
             Id = song.Id;
             Name = song.Name;
             Artist = song.Artist;

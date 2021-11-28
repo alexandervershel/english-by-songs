@@ -1,8 +1,4 @@
 ﻿using Entities;
-using Microsoft.Extensions.DependencyInjection;
-using Services;
-using Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -11,13 +7,8 @@ namespace EnglishBySongs.ViewModels.Items
 {
     public class WordItem : Word, IListViewItemViewModel, INotifyPropertyChanged
     {
-        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
-        private readonly IPageService _pageService;
-
         public WordItem(Word word)
         {
-            _pageService = _serviceProvider.GetService<IPageService>();
-
             Id = word.Id;
             Foreign = word.Foreign;
             IsLearned = word.IsLearned;
