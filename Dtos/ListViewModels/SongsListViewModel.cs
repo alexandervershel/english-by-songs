@@ -10,11 +10,9 @@ using Entities;
 using Services;
 using Microsoft.Extensions.DependencyInjection;
 using EnglishBySongs.ViewModels.Items;
-using EnglishBySongs.Helpers;
-using EnglishBySongs.Views;
-using EnglishBySongs.ViewModels.EditViewModels;
+using ViewModels.Helpers;
 
-namespace EnglishBySongs.ViewModels.ListViewModels
+namespace ViewModels.ListViewModels
 {
     public class SongsListViewModel : BaseListViewModel<SongItem>
     {
@@ -69,11 +67,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             AllItems = Items;
         }
 
-        protected override async Task ToItemEditPage()
-        {
-            await _pageService.PushAsync(new SongPage(new SongViewModel(SelectedItem)));
-        }
-
         protected override async Task DeleteItems(object obj)
         {
             if (SelectedItems.Count == 0)
@@ -86,7 +79,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             {
                 return;
             }
-            
+
             SelectedItems.ForEach(i =>
             {
                 i.Words.Where(w => w.Songs.Count == 1 && w.Songs.First() == i).ForEach(w => _wordRepository.Remove(w));
@@ -94,7 +87,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             });
             _songRepository.Save();
             RefreshAsync();
-            MessagingCenter.Send((BaseListViewModel<SongItem>)this, "SongsDeleted");
+            MessagingCenter.Send(this, "SongsDeleted");
             await DisableMultiselect();
             await _pageService.DispayToast("Песни удалены");
         }

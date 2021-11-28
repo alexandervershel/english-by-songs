@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using EnglishBySongs.ViewModels.Items;
 using EnglishBySongs.Helpers;
 using EnglishBySongs.ViewModels.EditViewModels;
+using EnglishBySongs.Views;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
@@ -95,6 +96,11 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             MessagingCenter.Send((BaseListViewModel<WordItem>)this, "WordsListChanged");
             await DisableMultiselect();
             await _pageService.DispayToast("Слова удалены");
+        }
+
+        protected override async Task ToItemEditPage()
+        {
+            await _pageService.PushAsync(new WordPage(new WordViewModel(SelectedItem)));
         }
 
         private async Task TransferToUnlearnedWords()

@@ -10,11 +10,10 @@ using System;
 using Services;
 using Microsoft.Extensions.DependencyInjection;
 using EnglishBySongs.ViewModels.Items;
-using EnglishBySongs.Helpers;
-using EnglishBySongs.ViewModels.EditViewModels;
-using EnglishBySongs.Views;
+using ViewModels.EditViewModels;
+using ViewModels.Helpers;
 
-namespace EnglishBySongs.ViewModels.ListViewModels
+namespace ViewModels.ListViewModels
 {
     public class UnlearnedWordsListViewModel : BaseListViewModel<WordItem>
     {
@@ -85,7 +84,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
 
             SelectedItems.ForEach(i => _wordRepository.Remove(i));
             _wordRepository.Save();
-            MessagingCenter.Send((BaseListViewModel<WordItem>)this, "WordsListChanged");
+            MessagingCenter.Send(this, "WordsListChanged");
             await DisableMultiselect();
             await _pageService.DispayToast("Слова удалены");
         }
@@ -94,11 +93,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
         {
             Items.Clear();
             _wordRepository.GetAll(w => !w.IsLearned).ForEach(w => Items.Add(new WordItem(w)));
-        }
-
-        protected override async Task ToItemEditPage()
-        {
-            await _pageService.PushAsync(new WordPage(new WordViewModel(SelectedItem)));
         }
 
         private async Task TransferToLearnedWords()
@@ -116,7 +110,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
 
             SelectedItems.ForEach(i => { i.IsLearned = true; _wordRepository.Update(i); });
             _wordRepository.Save();
-            MessagingCenter.Send((BaseListViewModel<WordItem>)this, "WordsListChanged");
+            MessagingCenter.Send(this, "WordsListChanged");
             await DisableMultiselect();
             await _pageService.DispayToast("Слова перенесены в раздел \"НЕВЫУЧЕНО\"");
         }

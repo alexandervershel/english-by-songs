@@ -5,29 +5,48 @@ using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using ViewModels.EditViewModels;
 
-namespace EnglishBySongs.ViewModels.Items
+namespace ViewModels.Dtos
 {
-    // TODO: избавиться от наследования Song
-    public class SongItem : Song, IListViewItemViewModel, INotifyPropertyChanged
+    public class WordItem : BaseViewModel, IListViewItemViewModel, INotifyPropertyChanged
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private readonly IPageService _pageService;
-        public SongItem(Song song)
+        public int Id { get; set; }
+        public string Foreign { get; set; }
+        public bool IsLearned { get; set; }
+        public virtual ICollection<Translation> Translations { get; set; } = new List<Translation>();
+        public virtual ICollection<Song> Songs { get; set; } = new List<Song>();
+        //[NotMapped]
+        public string Line
         {
-            // TODO: get rid of dependency
-            _pageService = _serviceProvider.GetService<IPageService>();
-
-            Id = song.Id;
-            Name = song.Name;
-            Artist = song.Artist;
-            Lyrics = song.Lyrics;
-            Words = song.Words;
-            StringByWhichToFind = Name;
+            get
+            {
+                List<Song> songs = Songs.ToList();
+                return songs[0].Lyrics.Split("\n").FirstOrDefault(s => s.Contains(Foreign, StringComparison.OrdinalIgnoreCase));
+            }
         }
 
+        public WordItem(Word word)
+        {
+            _pageService = _serviceProvider.GetService<IPageService>();
+
+            Id = word.Id;
+            Foreign = word.Foreign;
+            IsLearned = word.IsLearned;
+            Translations = word.Translations;
+            Songs = word.Songs;
+
+            StringByWhichToFind = word.Foreign;
+        }
+
+        // TODO: перенести в базовый класс
         private bool _isSelected;
+
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -37,9 +56,15 @@ namespace EnglishBySongs.ViewModels.Items
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
+
         public string StringByWhichToFind { get; set; }
 
-        // TODO: избавиться от этого
+        public async Task ToEditPage()
+        {
+            await _pageService.PushAsync(new WordPage(new WordViewModel(this)));
+        }
+
+        // TODO: удалить
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

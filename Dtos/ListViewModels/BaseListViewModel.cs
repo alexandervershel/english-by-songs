@@ -9,7 +9,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
-namespace EnglishBySongs.ViewModels.ListViewModels
+namespace ViewModels.ListViewModels
 {
     public abstract class BaseListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
     {
@@ -39,7 +39,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             ItemTappedCommand = new Command<T>(async (item) => await ItemTapped(item));
             DeleteWordsCommand = new Command<object>(async (obj) => await DeleteItems(obj));
             SelectAllCommand = new Command(async () => await SelectAll());
-            
         }
 
         public ObservableCollection<T> Items
@@ -78,8 +77,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                 SetValue(ref _selectedItem, value);
                 OnPropertyChanged(nameof(SelectedItem));
 
-                //SelectedItem.ToEditPage();
-                ToItemEditPage();
+                SelectedItem.ToEditPage();
             }
         }
 
@@ -110,8 +108,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
         protected abstract Task Sort();
 
         protected abstract Task DeleteItems(object obj);
-
-        protected abstract Task ToItemEditPage();
 
         protected async Task RefreshAsync()
         {

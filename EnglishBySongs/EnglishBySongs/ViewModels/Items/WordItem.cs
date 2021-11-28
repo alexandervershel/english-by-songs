@@ -1,6 +1,4 @@
-﻿using EnglishBySongs.ViewModels.EditViewModels;
-using EnglishBySongs.Views;
-using Entities;
+﻿using Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Interfaces;
@@ -8,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace EnglishBySongs.ViewModels.Items
 {
@@ -44,11 +41,6 @@ namespace EnglishBySongs.ViewModels.Items
         }
 
         public string StringByWhichToFind { get; set; }
-
-        public async Task ToEditPage()
-        {
-            await _pageService.PushAsync(new WordPage(new WordViewModel(this)));
-        }
 
         // TODO: удалить
         public event PropertyChangedEventHandler PropertyChanged;
