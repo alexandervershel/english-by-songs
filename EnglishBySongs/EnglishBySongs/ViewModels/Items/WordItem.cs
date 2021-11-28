@@ -16,16 +16,7 @@ namespace EnglishBySongs.ViewModels.Items
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private readonly IPageService _pageService;
 
-        //public WordItem()
-        //{
-        //    _pageService = new PageService();
-        //    stringByWhichToFind = Foreign;
-        //}
-        public WordItem()
-        {
-        }
-
-        public WordItem(Word word)// : this()
+        public WordItem(Word word)
         {
             _pageService = _serviceProvider.GetService<IPageService>();
 

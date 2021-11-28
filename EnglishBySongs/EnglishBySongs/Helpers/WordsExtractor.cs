@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace EnglishBySongs.Helpers
 {
-    public static class WordsExtractor
+    internal static class WordsExtractor
     {
         public static IEnumerable<string> Extract(string text)
         {

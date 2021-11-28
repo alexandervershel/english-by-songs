@@ -4,20 +4,19 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using System;
-using Services.Extensions;
 using Services.Enums;
 using Services.Interfaces;
 using Entities;
 using Services;
 using Microsoft.Extensions.DependencyInjection;
 using EnglishBySongs.ViewModels.Items;
+using EnglishBySongs.Helpers;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
-    public class SongsListViewModel : ListViewModel<SongItem>
+    public class SongsListViewModel : BaseListViewModel<SongItem>
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
-        // make readonly
         private readonly IRepository<Song> _songRepository = _serviceProvider.GetService<IRepository<Song>>();
         private readonly IRepository<Word> _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
         // may problem is in base constructor
@@ -31,7 +30,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                     await RefreshAsync();
                 });
 
-            MessagingCenter.Subscribe<ListViewModel<WordItem>>(
+            MessagingCenter.Subscribe<BaseListViewModel<WordItem>>(
                 this,
                 "WordsListChanged",
                 async (sender) =>
@@ -39,7 +38,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                     await RefreshAsync();
                 });
 
-            MessagingCenter.Subscribe<ListViewModel<WordItem>>(
+            MessagingCenter.Subscribe<BaseListViewModel<WordItem>>(
                 this,
                 "SongsDeleted",
                 async (sender) =>
@@ -64,33 +63,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
 
         protected override async Task Sort()
         {
-            Comparison<SongItem> comparison;
-            switch ((SongsSortingModes)Preferences.Get("SongsSortingMode", 2))
-            {
-                case SongsSortingModes.AddingDate:
-                    comparison = (s1, s2) => s1.Id.CompareTo(s2.Id);
-                    break;
-                case SongsSortingModes.AddingDateDescending:
-                    comparison = (s1, s2) => s2.Id.CompareTo(s1.Id);
-                    break;
-                case SongsSortingModes.Name:
-                    comparison = (s1, s2) => s1.Name.CompareTo(s2.Name);
-                    break;
-                case SongsSortingModes.NameDescending:
-                    comparison = (s1, s2) => s2.Name.CompareTo(s1.Name);
-                    break;
-                case SongsSortingModes.Artist:
-                    comparison = (s1, s2) => s1.Artist.CompareTo(s2.Artist);
-                    break;
-                case SongsSortingModes.ArtistDescending:
-                    comparison = (s1, s2) => s2.Artist.CompareTo(s1.Artist);
-                    break;
-                default:
-                    comparison = (s1, s2) => s1.Name.CompareTo(s2.Name);
-                    break;
-            }
-            Items.Sort(comparison);
-
+            Items = SortHelper.Sort(Items, (SongsSortingModes)Preferences.Get("SongsSortingMode", (int)SongsSortingModes.Name));
             AllItems = Items;
         }
 
@@ -114,8 +87,8 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             });
             _songRepository.Save();
             RefreshAsync();
-            MessagingCenter.Send((ListViewModel<SongItem>)this, "SongsDeleted");
-            await CancelMultiselect();
+            MessagingCenter.Send((BaseListViewModel<SongItem>)this, "SongsDeleted");
+            await DisableMultiselect();
             await _pageService.DispayToast("Песни удалены");
         }
     }

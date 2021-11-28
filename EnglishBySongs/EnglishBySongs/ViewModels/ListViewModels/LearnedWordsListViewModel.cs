@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -12,10 +10,11 @@ using System;
 using Services;
 using Microsoft.Extensions.DependencyInjection;
 using EnglishBySongs.ViewModels.Items;
+using EnglishBySongs.Helpers;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
-    public class LearnedWordsListViewModel : ListViewModel<WordItem>
+    public class LearnedWordsListViewModel : BaseListViewModel<WordItem>
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         public ICommand TransferToUnlearnedWordsCommand { get; private set; }
@@ -40,7 +39,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                     await RefreshAsync();
                 });
 
-            MessagingCenter.Subscribe<ListViewModel<WordItem>>(
+            MessagingCenter.Subscribe<BaseListViewModel<WordItem>>(
                 this,
                 "WordsListChanged",
                 async (sender) =>
@@ -56,7 +55,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                     await Sort();
                 });
 
-            MessagingCenter.Subscribe<ListViewModel<SongItem>>(
+            MessagingCenter.Subscribe<BaseListViewModel<SongItem>>(
                 this,
                 "SongsDeleted",
                 async (sender) =>
@@ -73,36 +72,8 @@ namespace EnglishBySongs.ViewModels.ListViewModels
 
         protected override async Task Sort()
         {
-            switch ((WordsSortingModes)Preferences.Get("WordsSortingMode", 2))
-            {
-                case WordsSortingModes.AddingDate:
-                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => x.Id));
-                    break;
-                case WordsSortingModes.AddingDateDescending:
-                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => x.Id));
-                    break;
-                case WordsSortingModes.Foreign:
-                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => x.Foreign));
-                    break;
-                case WordsSortingModes.ForeignDescending:
-                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => x.Foreign));
-                    break;
-                case WordsSortingModes.Translations:
-                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => string.Join("", x.Translations)).OrderByDescending(x => x.Translations?.Any()));
-                    break;
-                case WordsSortingModes.TranslationsDescending:
-                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => string.Join("", x.Translations)).OrderByDescending(x => x.Translations?.Any()));
-                    break;
-                case WordsSortingModes.Songs:
-                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => string.Join("", x.Songs)).OrderByDescending(x => x.Songs?.Any()));
-                    break;
-                case WordsSortingModes.SongsDescending:
-                    Items = new ObservableCollection<WordItem>(Items.OrderByDescending(x => string.Join("", x.Songs)).OrderByDescending(x => x.Songs?.Any()));
-                    break;
-                default:
-                    Items = new ObservableCollection<WordItem>(Items.OrderBy(x => x.Foreign));
-                    break;
-            }
+            Items = SortHelper.Sort(Items, (WordsSortingModes)Preferences.Get("WordsSortingMode", (int)WordsSortingModes.Foreign));
+            AllItems = Items;
         }
 
         protected override async Task DeleteItems(object obj)
@@ -120,8 +91,8 @@ namespace EnglishBySongs.ViewModels.ListViewModels
 
             SelectedItems.ForEach(i => _wordRepository.Remove(i));
             _wordRepository.Save();
-            MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
-            await CancelMultiselect();
+            MessagingCenter.Send((BaseListViewModel<WordItem>)this, "WordsListChanged");
+            await DisableMultiselect();
             await _pageService.DispayToast("Слова удалены");
         }
 
@@ -140,8 +111,8 @@ namespace EnglishBySongs.ViewModels.ListViewModels
 
             SelectedItems.ForEach(i => { i.IsLearned = false; _wordRepository.Update(i); });
             _wordRepository.Save();
-            MessagingCenter.Send((ListViewModel<WordItem>)this, "WordsListChanged");
-            await CancelMultiselect();
+            MessagingCenter.Send((BaseListViewModel<WordItem>)this, "WordsListChanged");
+            await DisableMultiselect();
             await _pageService.DispayToast("Слова перенесены в раздел \"ВЫУЧЕНО\"");
         }
     }

@@ -7,12 +7,12 @@ namespace Dal
     public class EnglishBySongsDbContext : DbContext
     {
         public const string DBFILENAME = "english_by_songs.db";
+        private string _databasePath;
+        private static EnglishBySongsDbContext _instance;
         public DbSet<Word> Words { get; set; }
         public DbSet<Song> Songs { get; set; }
         public DbSet<Translation> Translations { get; set; }
         public string Name { get; private set; }
-        private string _databasePath;
-        private static EnglishBySongsDbContext _instance;
         private EnglishBySongsDbContext()
         {
             _databasePath = DependencyService.Get<IDatabasePath>().GetPath(DBFILENAME);

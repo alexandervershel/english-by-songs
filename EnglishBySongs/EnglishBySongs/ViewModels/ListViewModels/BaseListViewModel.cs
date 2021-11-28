@@ -11,17 +11,21 @@ using Xamarin.Forms.Internals;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
-    // TODO: rename to 'MultiselectListViewModel'
-    public abstract class ListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
+    public abstract class BaseListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         protected readonly IPageService _pageService;
+        private ObservableCollection<T> _items;
+        private ObservableCollection<T> _allItems;
+        private T _selectedItem;
+        private string _itemsSearchQuery;
+        private bool _isMultiselect;
         public virtual ICommand ItemTappedCommand { get; private set; }
         public virtual ICommand DisplayCheckBoxesCommand { get; private set; }
         public virtual ICommand CancelMultiselectCommand { get; private set; }
         public virtual ICommand DeleteWordsCommand { get; private set; }
         public virtual ICommand SelectAllCommand { get; private set; }
-        public ListViewModel()
+        public BaseListViewModel()
         {
             _pageService = _serviceProvider.GetService<IPageService>();
             _isMultiselect = false;
@@ -30,14 +34,13 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             Sort();
             AllItems = Items;
 
-            DisplayCheckBoxesCommand = new Command(async () => await DisplayCheckBoxes());
-            CancelMultiselectCommand = new Command(async () => await CancelMultiselect());
+            DisplayCheckBoxesCommand = new Command(async () => await EnableMultiselect());
+            CancelMultiselectCommand = new Command(async () => await DisableMultiselect());
             ItemTappedCommand = new Command<T>(async (item) => await ItemTapped(item));
             DeleteWordsCommand = new Command<object>(async (obj) => await DeleteItems(obj));
             SelectAllCommand = new Command(async () => await SelectAll());
         }
 
-        private ObservableCollection<T> _items;
         public ObservableCollection<T> Items
         {
             get { return _items; }
@@ -48,7 +51,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             }
         }
 
-        private ObservableCollection<T> _allItems;
         public ObservableCollection<T> AllItems
         {
             get { return _allItems; }
@@ -67,8 +69,6 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             }
         }
 
-        private T _selectedItem;
-
         public T SelectedItem
         {
             get { return _selectedItem; }
@@ -76,11 +76,10 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             {
                 SetValue(ref _selectedItem, value);
                 OnPropertyChanged(nameof(SelectedItem));
+
                 SelectedItem.ToEditPage();
             }
         }
-
-        private string _itemsSearchQuery;
 
         public string ItemsSearchQuery
         {
@@ -89,23 +88,10 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             {
                 SetValue(ref _itemsSearchQuery, value);
                 OnPropertyChanged(nameof(ItemsSearchQuery));
-                // TODO: исправить
-                //IEnumerable<T> findedItems = _allItems;
-                //findedItems = findedItems.Where(i => i.stringByWhichToFind.Contains(_itemsSearchQuery));
-                //_items = new ObservableCollection<T>(findedItems);
 
                 Items = new ObservableCollection<T>(AllItems.Where(i => i.StringByWhichToFind.Contains(_itemsSearchQuery)).ToList());
-
-                //List<T> items = new List<T>();
-                //foreach (var item in Items)
-                //{
-                //    if(item.stringByWhichToFind.Contains(_itemsSearchQuery))
-
-                //}
             }
         }
-
-        private bool _isMultiselect;
 
         public bool IsMultiselect
         {
@@ -117,21 +103,17 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             }
         }
 
+        protected abstract void ReadCollectionFromDb();
+
+        protected abstract Task Sort();
+
+        protected abstract Task DeleteItems(object obj);
+
         protected async Task RefreshAsync()
         {
             ReadCollectionFromDb();
             Sort();
             AllItems = Items;
-        }
-
-        protected virtual void ReadCollectionFromDb()
-        {
-            //return Task.FromResult(default(List<T>));
-        }
-
-        protected virtual Task Sort()
-        {
-            return Task.FromResult(default(object));
         }
 
         protected async Task ItemTapped(T item)
@@ -146,25 +128,20 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             }
         }
 
-        protected async Task DisplayCheckBoxes()
+        protected async Task EnableMultiselect()
         {
             IsMultiselect = true;
-        }
-
-        protected async Task CancelMultiselect()
-        {
-            IsMultiselect = false;
-            AllItems.ForEach(w => w.IsSelected = false);
-        }
-
-        protected virtual Task DeleteItems(object obj)
-        {
-            return Task.FromResult(default(object));
         }
 
         protected async Task SelectAll()
         {
             AllItems.ForEach(w => w.IsSelected = true);
+        }
+
+        protected async Task DisableMultiselect()
+        {
+            IsMultiselect = false;
+            AllItems.ForEach(w => w.IsSelected = false);
         }
     }
 }

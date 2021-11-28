@@ -7,7 +7,7 @@ namespace EnglishBySongs.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SongsListPage : ContentPage
     {
-        private SongsListViewModel _songsListViewModel;
+        private readonly SongsListViewModel _songsListViewModel;
 
         public SongsListPage()
         {

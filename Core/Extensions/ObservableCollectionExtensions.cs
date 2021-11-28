@@ -7,11 +7,11 @@ namespace Services.Extensions
 {
     public static class ObservableCollectionExtensions
     {
-        public static void Sort<T>(this ObservableCollection<T> collection, Comparison<T> comparison)
+        public static ObservableCollection<T> Sort<T>(this ObservableCollection<T> collection, Comparison<T> comparison)
         {
             List<T> listToSort = collection.ToList();
             listToSort.Sort(comparison);
-            collection = new ObservableCollection<T>(listToSort);
+            return new ObservableCollection<T>(listToSort);
         }
     }
 }
