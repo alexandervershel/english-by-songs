@@ -1,8 +1,5 @@
-﻿using Dtos;
-using Microsoft.Extensions.DependencyInjection;
-using Services;
-using Services.Interfaces;
-using System;
+﻿using Core.Interfaces;
+using EnglishBySongs.ViewModels.ItemViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,13 +9,11 @@ using Xamarin.Forms.Internals;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
-    public abstract class BaseListViewModel<T> : BaseViewModel where T : IListViewItemViewModel
+    public abstract class BaseListViewModel<TItem, TModel> : PageServiceViewModel where TItem : IItemViewModel<TModel> where TModel : IModel
     {
-        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
-        protected readonly IPageService _pageService;
-        private ObservableCollection<T> _items;
-        private ObservableCollection<T> _allItems;
-        private T _selectedItem;
+        private ObservableCollection<TItem> _items;
+        private ObservableCollection<TItem> _allItems;
+        private TItem _selectedItem;
         private string _itemsSearchQuery;
         private bool _isMultiselect;
         public virtual ICommand ItemTappedCommand { get; private set; }
@@ -26,24 +21,23 @@ namespace EnglishBySongs.ViewModels.ListViewModels
         public virtual ICommand CancelMultiselectCommand { get; private set; }
         public virtual ICommand DeleteWordsCommand { get; private set; }
         public virtual ICommand SelectAllCommand { get; private set; }
-        public BaseListViewModel()
+        public BaseListViewModel() : base()
         {
-            _pageService = _serviceProvider.GetService<IPageService>();
             _isMultiselect = false;
-            Items = new ObservableCollection<T>();
+            Items = new ObservableCollection<TItem>();
             ReadCollectionFromDb();
             Sort();
             AllItems = Items;
 
             DisplayCheckBoxesCommand = new Command(async () => await EnableMultiselect());
             CancelMultiselectCommand = new Command(async () => await DisableMultiselect());
-            ItemTappedCommand = new Command<T>(async (item) => await ItemTapped(item));
+            ItemTappedCommand = new Command<TItem>(async (item) => await ItemTapped(item));
             DeleteWordsCommand = new Command<object>(async (obj) => await DeleteItems(obj));
             SelectAllCommand = new Command(async () => await SelectAll());
             
         }
 
-        public ObservableCollection<T> Items
+        public ObservableCollection<TItem> Items
         {
             get { return _items; }
             set
@@ -53,7 +47,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             }
         }
 
-        public ObservableCollection<T> AllItems
+        public ObservableCollection<TItem> AllItems
         {
             get { return _allItems; }
             set
@@ -63,15 +57,15 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             }
         }
 
-        public ObservableCollection<T> SelectedItems
+        public ObservableCollection<TItem> SelectedItems
         {
             get
             {
-                return new ObservableCollection<T>(AllItems.Where(w => w.IsSelected).ToList());
+                return new ObservableCollection<TItem>(AllItems.Where(w => w.IsSelected).ToList());
             }
         }
 
-        public T SelectedItem
+        public TItem SelectedItem
         {
             get { return _selectedItem; }
             set
@@ -92,7 +86,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                 SetValue(ref _itemsSearchQuery, value);
                 OnPropertyChanged(nameof(ItemsSearchQuery));
 
-                Items = new ObservableCollection<T>(AllItems.Where(i => i.StringByWhichToFind.Contains(_itemsSearchQuery)).ToList());
+                Items = new ObservableCollection<TItem>(AllItems.Where(i => i.StringByWhichToFind.Contains(_itemsSearchQuery)).ToList());
             }
         }
 
@@ -121,7 +115,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             AllItems = Items;
         }
 
-        protected async Task ItemTapped(T item)
+        protected async Task ItemTapped(TItem item)
         {
             if (!IsMultiselect)
             {

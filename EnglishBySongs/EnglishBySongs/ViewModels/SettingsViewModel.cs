@@ -1,24 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Services;
-using Services.Enums;
-using Services.Interfaces;
-using System;
+﻿using Services.Enums;
 using System.Collections.Generic;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
 {
-    class SettingsViewModel : BaseViewModel
+    class SettingsViewModel : PageServiceViewModel
     {
-        private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
-        protected IPageService _pageService;
-
         private bool _autoTranslatingIsSwitchedOn;
 
-        public SettingsViewModel()
+        public SettingsViewModel() : base()
         {
-            _pageService = _serviceProvider.GetService<IPageService>();
             _autoTranslatingIsSwitchedOn = Preferences.Get("AutoTranslating", true);
 
             _wordsSortingMode = (WordsSortingModes)Preferences.Get("WordsSortingMode", 2);

@@ -1,4 +1,4 @@
-﻿namespace Dal
+﻿namespace Core.Shared
 {
     public interface IDatabasePath
     {

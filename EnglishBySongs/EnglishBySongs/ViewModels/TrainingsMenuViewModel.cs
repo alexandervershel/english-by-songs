@@ -10,16 +10,14 @@ using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
 {
-    public class TrainingsMenuViewModel : BaseViewModel
+    public class TrainingsMenuViewModel : PageServiceViewModel
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
-        private readonly IPageService _pageService;
         private readonly IRepository<Word> _wordRepository;
         public ICommand StartTrainingCommand { get; private set; }
 
-        public TrainingsMenuViewModel()
+        public TrainingsMenuViewModel() : base()
         {
-            _pageService = _serviceProvider.GetService<IPageService>();
             _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
             StartTrainingCommand = new Command<string>(async (x) => await StartTraining(x));
 

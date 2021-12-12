@@ -5,15 +5,15 @@ using Xamarin.Forms.Xaml;
 namespace EnglishBySongs.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SongsListPage : ContentPage
+    public partial class SongListPage : ContentPage
     {
-        private readonly SongsListViewModel _songsListViewModel;
+        private readonly SongListViewModel _songsListViewModel;
 
-        public SongsListPage()
+        public SongListPage()
         {
             InitializeComponent();
 
-            _songsListViewModel = BindingContext as SongsListViewModel;
+            _songsListViewModel = BindingContext as SongListViewModel;
         }
 
         private void SongsListView_ItemTapped(object sender, ItemTappedEventArgs e)

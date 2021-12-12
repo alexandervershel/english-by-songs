@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace Services.Interfaces
+namespace EnglishBySongs.Interfaces
 {
     public interface IPageService
     {

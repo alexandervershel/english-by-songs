@@ -12,16 +12,14 @@ using EnglishBySongs.ViewModels.EditViewModels;
 
 namespace EnglishBySongs.ViewModels
 {
-    class TrainingViewModel : BaseViewModel
+    class TrainingViewModel : PageServiceViewModel
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
-        private readonly IPageService _pageService;
         private readonly IRepository<Word> _wordRepository;
         public ICommand PopPageCommand { get; private set; }
         public ICommand EndTrainingCommand { get; private set; }
-        public TrainingViewModel()
+        public TrainingViewModel() : base()
         {
-            _pageService = _serviceProvider.GetService<IPageService>();
             _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
 
             PopPageCommand = new Command(async () => await PopPage());
@@ -44,7 +42,7 @@ namespace EnglishBySongs.ViewModels
                 _wordRepository.Get(w => w.Foreign == word.Foreign).IsLearned = true;
             }
             _wordRepository.Save();
-            MessagingCenter.Send(new WordViewModel(), "WordUpdated");
+            MessagingCenter.Send(new WordEditViewModel(), "WordUpdated");
             await _pageService.PopAsync();
             await _pageService.DispayToast("Тренировка закончена");
         }

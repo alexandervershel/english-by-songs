@@ -12,17 +12,16 @@ using Microsoft.Extensions.DependencyInjection;
 using EnglishBySongs.Helpers;
 using EnglishBySongs.Views;
 using EnglishBySongs.ViewModels.EditViewModels;
-using Dtos;
+using EnglishBySongs.ViewModels.ItemViewModels;
 
 namespace EnglishBySongs.ViewModels.ListViewModels
 {
-    public class SongsListViewModel : BaseListViewModel<SongItem>
+    public class SongListViewModel : BaseListViewModel<SongItemViewModel, Song>
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private readonly IRepository<Song> _songRepository = _serviceProvider.GetService<IRepository<Song>>();
         private readonly IRepository<Word> _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
-        // may problem is in base constructor
-        public SongsListViewModel() : base()
+        public SongListViewModel() : base()
         {
             MessagingCenter.Subscribe<SongSearchViewModel>(
                 this,
@@ -32,7 +31,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                     await RefreshAsync();
                 });
 
-            MessagingCenter.Subscribe<BaseListViewModel<WordItem>>(
+            MessagingCenter.Subscribe<BaseListViewModel<WordItemViewModel, Word>>(
                 this,
                 "WordsListChanged",
                 async (sender) =>
@@ -40,7 +39,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
                     await RefreshAsync();
                 });
 
-            MessagingCenter.Subscribe<BaseListViewModel<WordItem>>(
+            MessagingCenter.Subscribe<BaseListViewModel<WordItemViewModel, Word>>(
                 this,
                 "SongsDeleted",
                 async (sender) =>
@@ -60,7 +59,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
         protected override void ReadCollectionFromDb()
         {
             Items.Clear();
-            _songRepository.GetAll().ForEach(s => Items.Add(new SongItem(s)));
+            _songRepository.GetAll().ForEach(s => Items.Add(new SongItemViewModel(s)));
         }
 
         protected override async Task Sort()
@@ -71,7 +70,7 @@ namespace EnglishBySongs.ViewModels.ListViewModels
 
         protected override async Task ToItemEditPage()
         {
-            await _pageService.PushAsync(new SongPage(new SongViewModel(SelectedItem)));
+            await _pageService.PushAsync(new SongEditPage(new SongEditViewModel(SelectedItem.Model)));
         }
 
         protected override async Task DeleteItems(object obj)
@@ -89,12 +88,12 @@ namespace EnglishBySongs.ViewModels.ListViewModels
             
             SelectedItems.ForEach(i =>
             {
-                i.Words.Where(w => w.Songs.Count == 1 && w.Songs.First() == i).ForEach(w => _wordRepository.Remove(w));
-                _songRepository.Remove(i);
+                i.Words.Where(w => w.Songs.Count == 1 && w.Songs.First() == i.Model).ForEach(w => _wordRepository.Remove(w));
+                _songRepository.Remove(i.Model);
             });
             _songRepository.Save();
             RefreshAsync();
-            MessagingCenter.Send((BaseListViewModel<SongItem>)this, "SongsDeleted");
+            MessagingCenter.Send((BaseListViewModel<SongItemViewModel, Song>)this, "SongsDeleted");
             await DisableMultiselect();
             await _pageService.DispayToast("Песни удалены");
         }

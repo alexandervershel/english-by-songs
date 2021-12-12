@@ -11,10 +11,10 @@
              Icon="dictionary.png">
 
             <ShellContent Title="Не выучено"
-                          ContentTemplate="{DataTemplate views:UnlearnedWordsPage}"/>
+                          ContentTemplate="{DataTemplate views:UnlearnedWordListPage}"/>
 
             <ShellContent Title="Выучено"
-                          ContentTemplate="{DataTemplate views:LearnedWordsPage}"/>
+                          ContentTemplate="{DataTemplate views:LearnedWordListPage}"/>
 
         </Tab>
 
@@ -28,7 +28,7 @@
 
         <ShellContent Title="ПЕСНИ"
                       Icon="songs_list.png"
-                      ContentTemplate="{DataTemplate views:SongsListPage}"/>
+                      ContentTemplate="{DataTemplate views:SongListPage}"/>
 
 
         <ShellContent Title="ТРЕНИРОВКА"

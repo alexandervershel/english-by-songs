@@ -1,4 +1,4 @@
-﻿namespace Entities
+﻿namespace Core.Interfaces
 {
     public interface IModel
     {

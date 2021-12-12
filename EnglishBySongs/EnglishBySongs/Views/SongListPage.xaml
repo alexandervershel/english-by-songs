@@ -4,10 +4,10 @@
              xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels.ListViewModels"
              xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             x:Class="EnglishBySongs.Views.SongsListPage">
+             x:Class="EnglishBySongs.Views.SongListPage">
 
     <ContentPage.BindingContext>
-        <viewmodel:SongsListViewModel/>
+        <viewmodel:SongListViewModel/>
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
@@ -39,7 +39,7 @@
 
                                     <CheckBox HorizontalOptions="EndAndExpand"
                                               Color="#7464ec"
-                                              IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SongsListViewModel}}, Path=IsMultiselect}"
+                                              IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SongListViewModel}}, Path=IsMultiselect}"
                                               IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
 
                                 </StackLayout>

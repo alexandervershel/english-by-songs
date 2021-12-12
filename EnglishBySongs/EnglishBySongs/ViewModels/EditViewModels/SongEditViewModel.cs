@@ -2,13 +2,13 @@
 
 namespace EnglishBySongs.ViewModels.EditViewModels
 {
-    public class SongViewModel : BaseViewModel
+    public class SongEditViewModel : BaseViewModel
     {
-        public SongViewModel()
+        public SongEditViewModel()
         {
         }
 
-        public SongViewModel(Song song) : this()
+        public SongEditViewModel(Song song) : this()
         {
             _primarySong = song;
             Artist = song.Artist;

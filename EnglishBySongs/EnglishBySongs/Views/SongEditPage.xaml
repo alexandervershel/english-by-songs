@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:EnglishBySongs.ViewModels.EditViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             x:Class="EnglishBySongs.Views.SongPage">
+             x:Class="EnglishBySongs.Views.SongEditPage">
 
     <ContentPage.BindingContext>
-        <viewmodel:SongViewModel/>
+        <viewmodel:SongEditViewModel/>
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>

@@ -6,11 +6,11 @@ using Xamarin.Forms.Xaml;
 namespace EnglishBySongs.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class WordPage : ContentPage
+    public partial class WordEditPage : ContentPage
     {
-        private WordViewModel _wordViewModel;
+        private WordEditViewModel _wordViewModel;
 
-        public WordPage(WordViewModel wordViewModel)
+        public WordEditPage(WordEditViewModel wordViewModel)
         {
             InitializeComponent();
 

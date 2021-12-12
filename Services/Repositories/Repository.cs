@@ -1,5 +1,5 @@
-﻿using Dal;
-using Entities;
+﻿using Core.Interfaces;
+using Dal;
 using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
 using System;

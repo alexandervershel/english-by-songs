@@ -23,11 +23,23 @@
     <Compile Update="Views\CardsForeignNativeTrainingPage.xaml.cs">
       <DependentUpon>CardsForeignNativeTrainingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\UnlearnedWordsPage.xaml.cs">
-      <DependentUpon>UnlearnedWordsPage.xaml</DependentUpon>
+    <Compile Update="Views\LearnedWordListPage.xaml.cs">
+      <DependentUpon>LearnedWordListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SongListPage.xaml.cs">
+      <DependentUpon>SongListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SongEditPage.xaml.cs">
+      <DependentUpon>SongEditPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\UnlearnedWordListPage.xaml.cs">
+      <DependentUpon>UnlearnedWordListPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SongSearchPage.xaml.cs">
       <DependentUpon>SongSearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\WordEditPage.xaml.cs">
+      <DependentUpon>WordEditPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -44,25 +56,25 @@
     <EmbeddedResource Update="Views\SettingsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\LearnedWordsPage.xaml">
+    <EmbeddedResource Update="Views\LearnedWordListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SongPage.xaml">
+    <EmbeddedResource Update="Views\SongEditPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\CardsForeignNativeTrainingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\UnlearnedWordsPage.xaml">
+    <EmbeddedResource Update="Views\UnlearnedWordListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SongsListPage.xaml">
+    <EmbeddedResource Update="Views\SongListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StartTrainingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\WordPage.xaml">
+    <EmbeddedResource Update="Views\WordEditPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SongSearchPage.xaml">
@@ -75,8 +87,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.csproj" />
-    <ProjectReference Include="..\..\Dal\Dal.csproj" />
-    <ProjectReference Include="..\..\Dtos\Dtos.csproj" />
     <ProjectReference Include="..\..\Entities\Entities.csproj" />
     <ProjectReference Include="..\..\Services\Services.csproj" />
   </ItemGroup>

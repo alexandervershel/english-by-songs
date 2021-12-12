@@ -13,31 +13,29 @@ using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels.EditViewModels
 {
-    public class WordViewModel : BaseViewModel
+    public class WordEditViewModel : PageServiceViewModel
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private readonly IRepository<Word> _wordRepository;
         private readonly IRepository<Translation> _translationRepository;
-        private readonly IPageService _pageService;
         private readonly IWordsTranslationsParser _translationsParser;
         public ICommand SaveChangesCommand { get; private set; }
         public ICommand AddNewTranslationCommand { get; private set; }
         public ICommand RemoveTranslationCommand { get; private set; }
         public ICommand TranslateWordCommand { get; private set; }
         private readonly Word _primaryWord;
-        public WordViewModel()
+        public WordEditViewModel() : base()
         {
             _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
             _translationRepository = _serviceProvider.GetService<IRepository<Translation>>();
             _translationsParser = _serviceProvider.GetService<IWordsTranslationsParser>();
-            _pageService = _serviceProvider.GetService<IPageService>();
             SaveChangesCommand = new Command(async () => await SaveChanges());
             AddNewTranslationCommand = new Command(async () => await AddNewTranslation());
             RemoveTranslationCommand = new Command(async (translation) => await RemoveTranslation(translation));
             TranslateWordCommand = new Command(async () => await TranslateWord());
         }
 
-        public WordViewModel(Word word) : this()
+        public WordEditViewModel(Word word) : this()
         {
             _primaryWord = word;
             Foreign = word.Foreign;

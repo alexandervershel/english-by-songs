@@ -5,11 +5,11 @@ using Xamarin.Forms.Xaml;
 namespace EnglishBySongs.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SongPage : ContentPage
+    public partial class SongEditPage : ContentPage
     {
-        private SongViewModel _songViewModel;
+        private SongEditViewModel _songViewModel;
 
-        public SongPage(SongViewModel songViewModel)
+        public SongEditPage(SongEditViewModel songViewModel)
         {
             InitializeComponent();
 

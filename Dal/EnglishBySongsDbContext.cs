@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Entities;
 using Xamarin.Forms;
+using Core.Shared;
 
 namespace Dal
 {

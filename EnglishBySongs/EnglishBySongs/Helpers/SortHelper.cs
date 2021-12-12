@@ -1,4 +1,4 @@
-﻿using Dtos;
+﻿using EnglishBySongs.ViewModels.ItemViewModels;
 using Services.Enums;
 using Services.Extensions;
 using System;
@@ -8,9 +8,9 @@ namespace EnglishBySongs.Helpers
 {
     internal static class SortHelper
     {
-        public static ObservableCollection<WordItem> Sort(ObservableCollection<WordItem> items, WordsSortingModes wordsSortingMode)
+        public static ObservableCollection<WordItemViewModel> Sort(ObservableCollection<WordItemViewModel> items, WordsSortingModes wordsSortingMode)
         {
-            Comparison<WordItem> comparison = wordsSortingMode switch
+            Comparison<WordItemViewModel> comparison = wordsSortingMode switch
             {
                 WordsSortingModes.AddingDate => (w1, w2) => w1.Id.CompareTo(w2.Id),
                 WordsSortingModes.AddingDateDescending => (w1, w2) => -w1.Id.CompareTo(w2.Id),
@@ -25,9 +25,9 @@ namespace EnglishBySongs.Helpers
             return items.Sort(comparison);
         }
 
-        public static ObservableCollection<SongItem> Sort(ObservableCollection<SongItem> items, SongsSortingModes songsSortingMode)
+        public static ObservableCollection<SongItemViewModel> Sort(ObservableCollection<SongItemViewModel> items, SongsSortingModes songsSortingMode)
         {
-            Comparison<SongItem> comparison = songsSortingMode switch
+            Comparison<SongItemViewModel> comparison = songsSortingMode switch
             {
                 SongsSortingModes.AddingDate => (s1, s2) => s1.Id.CompareTo(s2.Id),
                 SongsSortingModes.AddingDateDescending => (s1, s2) => s2.Id.CompareTo(s1.Id),

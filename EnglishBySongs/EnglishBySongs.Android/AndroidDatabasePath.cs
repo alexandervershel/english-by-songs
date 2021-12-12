@@ -1,4 +1,4 @@
-﻿using Dal;
+﻿using Core.Shared;
 using System;
 using System.IO;
 using Xamarin.Forms;

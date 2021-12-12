@@ -16,7 +16,7 @@ using Xamarin.Forms;
 
 namespace EnglishBySongs.ViewModels
 {
-    public class SongSearchViewModel : BaseViewModel
+    public class SongSearchViewModel : PageServiceViewModel
     {
         private static readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         public ICommand GetLyricsCommand { get; private set; }
@@ -27,13 +27,11 @@ namespace EnglishBySongs.ViewModels
         private readonly IRepository<Word> _wordRepository;
         private readonly IRepository<Song> _songRepository;
         private readonly ISongLyricsParser _songLyricsParser;
-        private readonly IPageService _pageService;
-        public SongSearchViewModel()
+        public SongSearchViewModel() : base()
         {
             _wordRepository = _serviceProvider.GetService<IRepository<Word>>();
             _songRepository = _serviceProvider.GetService<IRepository<Song>>();
             _songLyricsParser = _serviceProvider.GetService<ISongLyricsParser>();
-            _pageService = _serviceProvider.GetService<IPageService>();
             SelectedWords = new List<object>();
             Words = new List<Word>();
             IsConnectedToInternet = CrossConnectivity.Current.IsConnected;
